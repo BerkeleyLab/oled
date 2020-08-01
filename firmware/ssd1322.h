@@ -6,5 +6,6 @@ void set_brightness(uint8_t val);
 void send_fb(void);
 
 void send_window_4(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *data);
+void send_window_8(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *data);
 
 #endif
