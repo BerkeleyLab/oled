@@ -125,12 +125,13 @@ irq_vec:
 	picorv32_retirq_insn() # return from interrupt
 
 init_for_c:
-	# enable quad SPI mode (BASE_MEMIO = 0x01)
+	# config SPI mode (BASE_MEMIO = 0x01)
+	# 8 dummy cycles, quad mode, continuous mode
 	# MEMIO_CFG(BASE_MEMIO, 0, 1, 1, 8);
 	addi a4, zero, 0
 	addi a5, zero, 0
 	lui	a4,0x2000
-	li	a5,56
+	li	a5,0x38
 	sb	a5,-2(a4)
 
 	# copy data section
