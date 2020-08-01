@@ -5,6 +5,8 @@ include $(BUILD_DIR)/top_rules.mk
 include $(PICORV_DIR)/rules.mk
 
 CMOD_DIR=../common
+vpath %.S $(CMOD_DIR)
+vpath %.lds $(CMOD_DIR)
 vpath %.c $(CMOD_DIR) ../../sdl_sim
 vpath %.c $(CMOD_DIR) ../../firmware
 vpath %.cpp $(CMOD_DIR) ../../sdl_sim
@@ -19,10 +21,10 @@ SRC_V += stream_fifo.v shortfifo.v uart_fifo_pack.v uart_stream.v
 SRC_V += sfr_pack.v gpio_pack.v gpioz_pack.v spimemio.v spimemio_pack.v
 SRC_V += pb_debouncer.v sram_pack.v sram2_pack.v spi_pack.v spi_engine.v
 
-OBJS += system.o print.o timer.o startup_irq.o frame_buffer.o aa_line.o demo.o sin1.o ssd1322.o
+OBJS += system.o print.o timer.o frame_buffer.o aa_line.o demo.o sin1.o ssd1322.o
 
 #size of the blockRam [bytes]
-BLOCK_RAM_SIZE = 131072
+BLOCK_RAM_SIZE = 16384
 SYNTH_OPT += -DBLOCK_RAM_SIZE=$(BLOCK_RAM_SIZE)
 
 CFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\"

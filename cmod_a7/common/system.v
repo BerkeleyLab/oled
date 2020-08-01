@@ -60,11 +60,11 @@ localparam IRQ_UART0_RX = 8'h03;
 // --------------------------------------------------------------
 // match settings.h
 localparam BASE_BRAM =  8'h00;
-localparam BASE_SRAM =  8'h01;
-localparam BASE_SPI  =  8'h02;
-localparam BASE_GPIO =  8'h03;
-localparam BASE_UART0 = 8'h04;
-localparam BASE_MEMIO = 8'h05;
+localparam BASE_MEMIO = 8'h01;
+localparam BASE_SRAM =  8'h02;
+localparam BASE_SPI  =  8'h03;
+localparam BASE_GPIO =  8'h04;
+localparam BASE_UART0 = 8'h05;
 
 // --------------------------------------------------------------
 //  Internal reset generator
@@ -199,8 +199,6 @@ memory_pack #(
         .ram_nwe       (ram_nwe)
     );
 `endif
-
-
 
 // --------------------------------------------------------------
 //  SPI for oled

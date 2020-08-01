@@ -39,6 +39,8 @@ int main(void)
     UART_INIT(BASE_UART0, BOOTLOADER_BAUDRATE);  // Debug print (USB serial)
     _picorv32_irq_enable(1 << IRQ_UART0_RX);
 
+    print_str("Hello World!\n");
+
     init_ssd1322();
     set_brightness(10);
 
