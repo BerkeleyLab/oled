@@ -90,7 +90,12 @@ wire [32:0] packed_cpu_ret;
 assign irqFlags[2:0] = 0;
 assign irqFlags[31:4]= 0;
 
-pico_pack cpu_inst (
+pico_pack #(
+    // execute from SPI flash starting from address 0x200000
+    // first half of it is reserved for the .bit file
+    .PROGADDR_RESET((BASE_MEMIO << 24) + 24'h200000),
+    .PROGADDR_IRQ  ((BASE_MEMIO << 24) + 24'h200010)
+) cpu_inst (
     .clk           ( clk            ),
     .reset         ( reset          ),
     .trap          ( trap           ),
