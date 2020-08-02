@@ -18,10 +18,6 @@ SRC_V += system_tb.v sram_model.v spiflash.v
 # run from flash
 OBJS += startup_flash.o flash.lds
 
-# need to subtract the flash BASE_ADDR
-flash8.hex: $(TARGET).elf
-	$(RISCV_TOOLS_PREFIX)objcopy --change-addresses -0x01000000 $^ -O verilog $@
-
 $(TARGET).vcd: flash8.hex
 $(TARGET).elf: $(OBJS)
 $(TARGET)_tb: $(SRC_V)

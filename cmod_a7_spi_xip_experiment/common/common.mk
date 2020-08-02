@@ -31,3 +31,10 @@ CFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\"
 CFLAGS += -I../common -I../../sdl_sim -I../../firmware
 CFLAGS += -DBOOTLOADER_BAUDRATE=$(BOOTLOADER_BAUDRATE)
 CFLAGS += -ffunction-sections
+
+# need to subtract the flash BASE_ADDR
+flash8.hex: $(TARGET).elf
+	$(RISCV_TOOLS_PREFIX)objcopy --change-addresses -0x01000000 $^ -O verilog $@
+
+flash8.bin: $(TARGET).elf
+	$(RISCV_TOOLS_PREFIX)objcopy --change-addresses -0x01000000 $^ -O binary $@

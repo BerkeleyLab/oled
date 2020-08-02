@@ -7,7 +7,7 @@
 # ---------------------------------------------------------------------------------------
 #  Init script to run C programs
 # ---------------------------------------------------------------------------------------
-# assuming 2048 words memory, with interrupt support
+# designed for code in read-only memory
 # requires this function to be present in C program:
 # uint32_t *irq(uint32_t *regs, uint32_t irqs){ return regs; }
 #include "custom_ops.S"
@@ -128,11 +128,12 @@ init_for_c:
 	# config SPI mode (BASE_MEMIO = 0x01)
 	# 8 dummy cycles, quad mode, continuous mode
 	# MEMIO_CFG(BASE_MEMIO, 0, 1, 1, 8);
-	addi a4, zero, 0
-	addi a5, zero, 0
-	lui	a4,0x2000
-	li	a5,0x38
-	sb	a5,-2(a4)
+	# works in sim, on cmodA7 this traps the CPU :(
+	# addi a4, zero, 0
+	# addi a5, zero, 0
+	# lui	a4,0x2000
+	# li	a5,0x38
+	# sb	a5,-2(a4)
 
 	# copy data section
 	la a0, _sidata

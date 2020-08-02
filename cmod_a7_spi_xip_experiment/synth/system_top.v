@@ -70,11 +70,14 @@ STARTUPE2 SUP_INST (
     .USRDONETS  (0)
 );
 
+wire trap;
+
 system #(
     .SYSTEM_HEX_PATH ("system32.dat")
 ) system_inst (
     .clk        (clk),
     .cpu_reset  (~locked),
+    .trap       (trap),
 
     .uart_tx0   (UART_TXD),
     .uart_rx0   (UART_RXD),
@@ -100,7 +103,7 @@ system #(
     .flash_dz   (qspi_dq)
 );
 
-assign LEDS[1:0] = gpio_z[7:6];
+assign LEDS[1:0] = gpio_z[7:6] | {trap, trap};
 assign {oled_reset, oled_c_d, LED_B, LED_G, LED_R} = gpio_z[4:0];
 
 endmodule

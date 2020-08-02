@@ -6,6 +6,7 @@
 #include "uart.h"
 #include "gpio.h"
 #include "spi.h"
+#include "spi_memio.h"
 #include "timer.h"
 #include "frame_buffer.h"
 #include "ssd1322.h"
@@ -36,10 +37,12 @@ uint32_t *irq(uint32_t *regs, uint32_t irqs)
 
 int main(void)
 {
+    // MEMIO_CFG(BASE_MEMIO, 0, 1, 1, 8);  // spi flash quad mode, trap! :(
+
     UART_INIT(BASE_UART0, BOOTLOADER_BAUDRATE);  // Debug print (USB serial)
     _picorv32_irq_enable(1 << IRQ_UART0_RX);
 
-    print_str("Hello World!\n");
+    print_str("Hello World from flash!!!\n");
 
     init_ssd1322();
     set_brightness(10);
