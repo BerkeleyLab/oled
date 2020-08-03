@@ -128,7 +128,7 @@ init_for_c:
 	# config SPI mode (BASE_MEMIO = 0x01)
 	# 8 dummy cycles, quad mode, continuous mode
 	# MEMIO_CFG(BASE_MEMIO, 0, 1, 1, 8);
-	# works in sim, on cmodA7 this traps the CPU :(
+	# TODO works in sim, on cmodA7 this traps the CPU :(
 	# addi a4, zero, 0
 	# addi a5, zero, 0
 	# lui	a4,0x2000

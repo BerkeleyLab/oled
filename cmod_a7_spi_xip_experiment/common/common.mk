@@ -7,9 +7,8 @@ include $(PICORV_DIR)/rules.mk
 CMOD_DIR=../common
 vpath %.S $(CMOD_DIR)
 vpath %.lds $(CMOD_DIR)
-vpath %.c $(CMOD_DIR) ../../sdl_sim
 vpath %.c $(CMOD_DIR) ../../firmware
-vpath %.cpp $(CMOD_DIR) ../../sdl_sim
+vpath %.c $(CMOD_DIR) ../../firmware/lib
 vpath system.v $(CMOD_DIR)
 vpath sram_model.v $(PICORV_DIR)/test/sram
 vpath spiflash.v $(PICORV_DIR)/test/memio
@@ -23,12 +22,18 @@ SRC_V += pb_debouncer.v sram_pack.v sram2_pack.v spi_pack.v spi_engine.v
 
 OBJS += system.o print.o timer.o frame_buffer.o aa_line.o demo.o sin1.o ssd1322.o
 
+# run from block ram
+# OBJS += startup_irq.o bootloader.o 0x0e0.lds
+
+# run from flash
+OBJS += startup_flash.o flash.lds
+
 #size of the blockRam [bytes]
 BLOCK_RAM_SIZE = 16384
 SYNTH_OPT += -DBLOCK_RAM_SIZE=$(BLOCK_RAM_SIZE)
 
 CFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\"
-CFLAGS += -I../common -I../../sdl_sim -I../../firmware
+CFLAGS += -I../common -I../../firmware -I../../firmware/lib
 CFLAGS += -DBOOTLOADER_BAUDRATE=$(BOOTLOADER_BAUDRATE)
 CFLAGS += -ffunction-sections
 
