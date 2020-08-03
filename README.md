@@ -1,0 +1,19 @@
+# OLED display driver for picorv32
+Tested on [NHD-2.8-25664UCB2](http://www.newhavendisplay.com/specs/NHD-2.8-25664UCB2.pdf): 256 x 64 pixels, 16 shades. 
+Other displays with [ssd1322](https://www.newhavendisplay.com/app_notes/SSD1322.pdf#page=1&zoom=auto,-274,842) controller should also work.
+
+# Features
+  * draw pixel
+  * draw line (anti aliased)
+  * draw text (anti aliased, variable or fixed width bitmap fonts, unicode support)
+
+The font engine is a stripped down version of the one used in [LVGL](https://docs.lvgl.io/latest/en/html/overview/font.html). 
+
+Only 4 bit/pixel support, no kerning and no compression.
+
+The LVGL [Font Converter](https://lvgl.io/tools/fontconverter) can be used to generate a `.c` file with custom font data.
+
+# SDL simulation
+The demo app can be previewed and developed on a PC using the [SDL](https://www.libsdl.org/) library for graphics output. See `sdl_sim/test.c`.
+
+![sdl demo app](sdl_sim/oled.png)
