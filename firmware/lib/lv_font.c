@@ -312,6 +312,25 @@ static void draw_glyph4(const uint8_t *bmp, unsigned x, unsigned y, unsigned w, 
     }
 }
 
+// get (approximate) bounding box (width and height) of the rendered text
+void get_bb(const char *txt, int *w, int *h)
+{
+    int x=0;
+    uint32_t c_ind = 0;
+    unsigned dc = lv_txt_utf8_next(txt, &c_ind);
+    lv_font_glyph_dsc_t g;
+    while (dc) {
+        get_glyph_dsc(cur_font, &g, dc);
+        x += g.adv_w;
+        dc = lv_txt_utf8_next(txt, &c_ind);
+    }
+    if (w)
+        *w = x;
+    if (h)
+        *h = cur_font->line_height;
+}
+
+
 void draw_str(const char *txt, int x, int y)
 {
     int x_start = x;

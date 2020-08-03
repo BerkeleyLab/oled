@@ -250,6 +250,7 @@ bool get_glyph_dsc(const lv_font_t * font, lv_font_glyph_dsc_t * dsc_out, uint32
 const uint8_t * get_glyph_bitmap(const lv_font_t * font, uint32_t unicode_letter);
 
 void draw_str(const char *c, int x, int y);
+void get_bb(const char *txt, int *w, int *h);
 void set_font(lv_font_t *f);
 // void print_font(void);
 
