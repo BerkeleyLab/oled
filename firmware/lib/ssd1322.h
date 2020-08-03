@@ -3,7 +3,7 @@
 
 void init_ssd1322(void);
 
-// set OLED brightness (0 - 16)
+// set OLED brightness (0 = off, 1 - 16 = on)
 void set_brightness(uint8_t val);
 
 // send the complete framebuffer to the display

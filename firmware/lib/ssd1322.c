@@ -78,7 +78,6 @@ void init_ssd1322(void)
     send_init(init, sizeof(init) / sizeof(init[0]));
 }
 
-// from 0 - 15
 void set_brightness(uint8_t val)
 {
     if (val == 0) {
