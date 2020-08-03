@@ -44,7 +44,7 @@ int main(void)
     print_str("Started OLED experiment ...\n");
 
     init_ssd1322();
-    set_brightness(4);
+    set_brightness(1);
     set_font(&lv_font_montserrat_18);
 
     while (1) {

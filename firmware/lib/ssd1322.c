@@ -81,8 +81,13 @@ void init_ssd1322(void)
 // from 0 - 15
 void set_brightness(uint8_t val)
 {
-    send_cmd(0xC7);
-    SPI(val);
+    if (val == 0) {
+        send_cmd(0xAE);  // display off
+    } else {
+        send_cmd(0xAF);  // display on
+        send_cmd(0xC7);  // set brightness (0 - 15)
+        SPI(val - 1);
+    }
     send_cmd(0x5C);  // write VRAM command
 }
 
@@ -116,35 +121,35 @@ void send_window_4(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *
         SPI(*data++);
 }
 
-static unsigned getBrightness(uint8_t color)
-{
-    unsigned tmp = (color & 0x03) + ((color >> 2) & 0x07) + ((color >> 5) & 0x07);
-    return (tmp > 0x0F ? 0x0F : tmp);
-}
+// static unsigned get_lumi(uint8_t color)
+// {
+//     unsigned tmp = (color & 0x03) + ((color >> 2) & 0x07) + ((color >> 5) & 0x07);
+//     return (tmp > 0x0F ? 0x0F : tmp);
+// }
 
 // x1, y1, x2, y2: the rectangle to update in [pixels]
 // note that ssd1322 works with columns of 4 pixels horizontally
 // so the lower 2 bits of x1 and x2 will be truncated
 // data in 8 bits / pixel, 8 pixels / byte, 3:3:2 RGB format
-// TODO replace with special VRAM in fabric which does DMA SPI transfers
-void send_window_8(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *data)
-{
-    x1 >>= 2;
-    x2 >>= 2;
-    send_cmd(0x15);  // Set column address range
-    SPI(0x1C + x1);
-    SPI(0x1C + x2);
+// this was only used in the full LVGL port
+// void send_window_8(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *data)
+// {
+//     x1 >>= 2;
+//     x2 >>= 2;
+//     send_cmd(0x15);  // Set column address range
+//     SPI(0x1C + x1);
+//     SPI(0x1C + x2);
 
-    send_cmd(0x75);  // Set row address range
-    SPI(y1);
-    SPI(y2);
+//     send_cmd(0x75);  // Set row address range
+//     SPI(y1);
+//     SPI(y2);
 
-    // number of bytes to transfer over SPI
-    unsigned n_bytes = (x2 - x1 + 1) * 2 * (y2 - y1 + 1);
-    send_cmd(0x5C);  // write VRAM
-    for (unsigned i=0; i<n_bytes; i++) {
-        uint8_t tmp = getBrightness(*data++) << 4;
-        tmp |= getBrightness(*data++);
-        SPI(tmp);
-    }
-}
+//     // number of bytes to transfer over SPI
+//     unsigned n_bytes = (x2 - x1 + 1) * 2 * (y2 - y1 + 1);
+//     send_cmd(0x5C);  // write VRAM
+//     for (unsigned i=0; i<n_bytes; i++) {
+//         uint8_t tmp = get_lumi(*data++) << 4;
+//         tmp |= get_lumi(*data++);
+//         SPI(tmp);
+//     }
+// }
