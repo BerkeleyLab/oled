@@ -24,6 +24,23 @@ void setPixel(unsigned x, unsigned y, uint8_t shade)
 		*p = (*p & 0x0F) | (shade << 4);  // set upper nibble
 }
 
+// Increase brightness of 4 bit pixel in framebuffer
+void addPixel(unsigned x, unsigned y, uint8_t shade)
+{
+	// screen clipping needed for aaLine
+	if (x >= DISPLAY_WIDTH || y >= DISPLAY_HEIGHT)
+		return;
+
+	shade &= 0x0F;
+
+	uint8_t *p = &g_frameBuff[x / 2 + y * (DISPLAY_WIDTH / 2)];
+
+	if ((x & 0x01) == 0)
+		shade <<= 4;
+
+	*p |= shade;
+}
+
 // get a 4 bit pixel-value from framebuffer
 uint8_t getPixel(unsigned x, unsigned y)
 {

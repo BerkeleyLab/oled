@@ -9,7 +9,7 @@
 // changed arithmetic to picorv32 native 32 bit
 #define INTENSITY_BITS 4
 #define BASE_COLOR 0x0F
-#define N_BITS 32  // number of bits in an unsigned int
+#define N_BITS 16  // number of bits of `ErrorAdj` and `ErrorAcc`
 
 // number of bits by which to shift ErrorAcc to get intensity level
 #define INTENSITY_SHIFT (N_BITS - INTENSITY_BITS)
@@ -19,9 +19,9 @@
 // draw white anti-aliased line from (x0, y0) to (x1, y1)
 void drawLine(int X0, int Y0, int X1, int Y1)
 {
-   uint32_t ErrorAdj, ErrorAcc;
-   uint32_t ErrorAccTemp, Weighting;
-   int32_t DeltaX, DeltaY, Temp, XDir;
+   uint16_t ErrorAdj, ErrorAcc;
+   unsigned ErrorAccTemp, Weighting;
+   int DeltaX, DeltaY, Temp, XDir;
 
    // Make sure the line runs top to bottom
    if (Y0 > Y1) {
@@ -73,7 +73,7 @@ void drawLine(int X0, int Y0, int X1, int Y1)
       // Y-major line; calculate N_BITS-bit fixed-point fractional part of a
       // pixel that X advances each time Y advances 1 pixel, truncating the
       // result so that we won't overrun the endpoint along the X axis
-      ErrorAdj = ((uint64_t) DeltaX << N_BITS) / (uint64_t) DeltaY;
+      ErrorAdj = ((uint32_t) DeltaX << N_BITS) / (uint32_t) DeltaY;
       // Draw all pixels other than the first and last
       while (--DeltaY) {
          ErrorAccTemp = ErrorAcc;   // remember current accumulated error
@@ -90,7 +90,7 @@ void drawLine(int X0, int Y0, int X1, int Y1)
       return;
    }
    // It's an X-major line;
-   ErrorAdj = ((uint64_t) DeltaY << N_BITS) / (uint64_t) DeltaX;
+   ErrorAdj = ((uint32_t) DeltaY << N_BITS) / (uint32_t) DeltaX;
    // Draw all pixels other than the first and last
    while (--DeltaX) {
       ErrorAccTemp = ErrorAcc;   // remember current accumulated error

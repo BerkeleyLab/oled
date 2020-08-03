@@ -3,6 +3,7 @@
 #include <math.h>
 #include "frame_buffer.h"
 #include "demo.h"
+#include "lv_font.h"
 
 #define ZOOM 4
 
@@ -49,6 +50,9 @@ static void init_sdl()
 
 int main(int argc, char* args[])
 {
+	set_font(&lv_font_montserrat_18);
+	// print_font();
+
 	init_sdl();
 
 	while (1) {
@@ -59,8 +63,7 @@ int main(int argc, char* args[])
 			}
 		}
 
-		draw_test_frame();
-
+		drawLasers();
 		send_fb();
 		SDL_Delay(20);
 	}

@@ -6,7 +6,7 @@ CFLAGS += -I../firmware -I../firmware/lib
 
 all: test
 
-test: frame_buffer.o aa_line.o demo.o sin1.o
+test: frame_buffer.o aa_line.o demo.o sin1.o lv_font.o lv_font_montserrat_18.o
 
 clean:
 	rm -rf test *.o
