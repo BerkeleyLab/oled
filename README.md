@@ -5,11 +5,11 @@ Other displays with [ssd1322](https://www.newhavendisplay.com/app_notes/SSD1322.
 # Features
   * draw pixel
   * draw line (anti aliased)
-  * draw text (anti aliased, variable or fixed width bitmap fonts, unicode support)
+  * draw text (anti aliased, variable or fixed width bitmap fonts, UTF-8 support)
 
 The font engine is a stripped down version of the one used in [LVGL](https://docs.lvgl.io/latest/en/html/overview/font.html). 
 
-Only 4 bit/pixel support, no kerning and no compression.
+Only 4 bit / pixel, no kerning, no compression, no bidirectional mode.
 
 The LVGL [Font Converter](https://lvgl.io/tools/fontconverter) can be used to generate a `.c` file with custom font data.
 
