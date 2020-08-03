@@ -34,6 +34,6 @@ flash_read.bin:
 	$(eval OCD_OPS = flash read_bank 0 $@;)
 	$(OCD_CMD)
 
-CLEAN += $(TARGET)_top.bit $(TARGET)_top.bin flash8.bin flash_read.bin
+CLEAN += $(TARGET)_top.bit $(TARGET)_top.bin $(TARGET)_top.prm flash8.bin flash_read.bin
 CLEAN_DIRS += _xilinx .Xil
 include $(BUILD_DIR)/bottom_rules.mk
