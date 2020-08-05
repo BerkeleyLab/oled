@@ -16,6 +16,6 @@ uint8_t getPixel(unsigned x, unsigned y);
 void fill(uint8_t shade);
 
 // Draw a rectangle from (x1, y1) to (x2, y2)
-void rect(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t shade);
+void rect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t shade);
 
 #endif

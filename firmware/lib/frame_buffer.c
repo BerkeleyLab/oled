@@ -60,44 +60,37 @@ void fill(uint8_t shade)
 }
 
 // Draw one horizontal line with a certain shade (fast, no checks)
-static void hLine(unsigned x1, unsigned x2, unsigned y, uint8_t shade)
+static void hLine(unsigned x1, unsigned x2, unsigned y, unsigned shade)
 {
-	uint8_t shade_ = (shade << 4) | shade;
 	uint8_t *p = &g_frameBuff[x1 / 2 + y * (DISPLAY_WIDTH / 2)];
 
 	if (x1 & 0x01) {
-		*p++ = (*p & 0xF0) | shade;  // set lower nibble
+		*p = (*p & 0xF0) | shade;  // set lower nibble only
+		p++;
 		x1++;
 	}
 
 	unsigned len = (x2 - x1 + 1) / 2;
-	memset(p, shade_, len);
+	memset(p, (shade << 4) | shade, len);  // set bytes / words
 
 	if ((x2 & 0x01) == 0) {
 		p += len;
-		*p = (*p & 0x0F) | (shade << 4);  // set upper nibble
+		*p = (*p & 0x0F) | (shade << 4);  // set upper nibble only
 	}
 }
 
-static void swap(unsigned *a, unsigned *b)
+static void swap(uint8_t *a, uint8_t *b)
 {
-	unsigned t = *a;
+	uint8_t t = *a;
 	*a = *b;
 	*b = t;
 }
 
-void rect(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t shade)
+void rect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t shade)
 {
 	shade &= 0x0F;
-
-	if (x1 >= DISPLAY_WIDTH)
-		x1 = DISPLAY_WIDTH - 1;
-	if (x2 >= DISPLAY_WIDTH)
-		x2 = DISPLAY_WIDTH - 1;
-	if (y1 >= DISPLAY_HEIGHT)
-		y1 = DISPLAY_HEIGHT - 1;
-	if (y2 >= DISPLAY_HEIGHT)
-		y2 = DISPLAY_HEIGHT - 1;
+	y1 &= DISPLAY_HEIGHT - 1;
+	y2 &= DISPLAY_HEIGHT - 1;
 
 	if (x1 > x2)
 		swap(&x1, &x2);
