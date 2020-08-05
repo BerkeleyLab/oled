@@ -4,6 +4,7 @@ Other displays with [ssd1322](https://www.newhavendisplay.com/app_notes/SSD1322.
 
 # Features
   * draw pixel
+  * draw rectangle
   * draw line (anti aliased)
   * draw text (anti aliased, variable or fixed width bitmap fonts, UTF-8 support)
 
