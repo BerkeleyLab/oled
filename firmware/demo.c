@@ -46,7 +46,7 @@ void drawLasers()
 	static unsigned n_lines=8, x=64, y=16;
 	int dx = 0, dy = 0;
 
-	setAll(0);
+	fill(0);
 
 	if (frm % 400 == 0) {
 		n_lines = RAND_AB(3, 16);  // number of lines
@@ -63,12 +63,14 @@ void drawLasers()
 
 	char chars[32] = {0xef, 0x81, 0xae, 0x20};
 
-	int bla = cos1(alpha * 16) * DISPLAY_WIDTH / 32768 / 4 + DISPLAY_WIDTH / 8;
-	int blu = cos1(alpha * 9) * DISPLAY_HEIGHT / 32768 / 4;
+	int bla = cos1(alpha * 10) * DISPLAY_WIDTH / 32768 / 4 + DISPLAY_WIDTH / 8;
+	int blu = cos1(alpha * 16) * DISPLAY_HEIGHT / 32768 / 4;
 
-	draw_str(LV_SYMBOL_WARNING " Hallo Welt! " LV_SYMBOL_OK "\nThe quick brown Fox", bla, blu);
+	draw_str(LV_SYMBOL_WARNING " Hallo Welt! " LV_SYMBOL_OK "\nThe qwjck brown Fox", bla, blu);
 	itoa(frm, chars + 4, 10);
 	draw_str(chars, bla, 45);
+
+	rect(5, 5, 33, 48, 1);
 
 	alpha += 10;
 	frm++;

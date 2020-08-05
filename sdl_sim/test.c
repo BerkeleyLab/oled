@@ -64,6 +64,7 @@ int main(int argc, char* args[])
 		}
 
 		drawLasers();
+
 		send_fb();
 		SDL_Delay(20);
 	}
