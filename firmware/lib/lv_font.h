@@ -31,7 +31,6 @@
 #define LVGL_VERSION_MAJOR 7
 typedef int16_t lv_coord_t;
 
-
 /** Describes the properties of a glyph. */
 typedef struct {
     uint16_t adv_w; /**< The glyph needs this space. Draw the next glyph after this width. 8 bit integer, 4 bit fractional */
@@ -249,13 +248,19 @@ bool get_glyph_dsc(const lv_font_t * font, lv_font_glyph_dsc_t * dsc_out, uint32
  */
 const uint8_t * get_glyph_bitmap(const lv_font_t * font, uint32_t unicode_letter);
 
-void draw_str(const char *c, int x, int y);
-void get_bb(const char *txt, int *w, int *h);
+
+//-----------------------------------------------
+// public functions
+//-----------------------------------------------
 void set_font(lv_font_t *f);
-// void print_font(void);
+void set_cursor(int x, int y);
+void draw_char(char c);  // draw 1 or less UTF8 character, adv. cursor
+void get_bb(const char *txt, int *w, int *h);  // get bounding box
 
-extern lv_font_t lv_font_montserrat_18;
 
+//-----------------------------------------------
+// some useful unicode symbols
+//-----------------------------------------------
 #define LV_SYMBOL_AUDIO           "\xef\x80\x81" /*61441, 0xF001*/
 #define LV_SYMBOL_VIDEO           "\xef\x80\x88" /*61448, 0xF008*/
 #define LV_SYMBOL_LIST            "\xef\x80\x8b" /*61451, 0xF00B*/

@@ -2,6 +2,8 @@
 Tested on [NHD-2.8-25664UCB2](http://www.newhavendisplay.com/specs/NHD-2.8-25664UCB2.pdf): 256 x 64 pixels, 16 shades. 
 Other displays with [ssd1322](https://www.newhavendisplay.com/app_notes/SSD1322.pdf#page=1&zoom=auto,-274,842) controller should also work.
 
+The actual library files are in `firmware/lib`. Everything else is just for demonstration / testing.
+
 # Features
   * draw pixel
   * draw rectangle

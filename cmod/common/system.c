@@ -13,12 +13,6 @@
 #include "demo.h"
 #include "lv_font.h"
 
-void _putchar(char c)
-{
-    // hook for all print_* functions
-    UART_PUTC(BASE_UART0, c);
-}
-
 volatile unsigned chars_received = 0;
 uint32_t *irq(uint32_t *regs, uint32_t irqs)
 {
@@ -41,11 +35,8 @@ int main(void)
     UART_INIT(BASE_UART0, BOOTLOADER_BAUDRATE);  // Debug print (USB serial)
     _picorv32_irq_enable(1 << IRQ_UART0_RX);
 
-    print_str("Started OLED experiment ...\n");
-
     init_ssd1322();
     set_brightness(1);
-    set_font(&lv_font_montserrat_18);
 
     while (1) {
         drawLasers();

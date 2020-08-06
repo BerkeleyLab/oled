@@ -50,9 +50,6 @@ static void init_sdl()
 
 int main(int argc, char* args[])
 {
-	set_font(&lv_font_montserrat_18);
-	// print_font();
-
 	init_sdl();
 
 	while (1) {

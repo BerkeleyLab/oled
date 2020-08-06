@@ -3,40 +3,21 @@
 #include "aa_line.h"
 #include "lv_font.h"
 #include "sin1.h"
+#include "print.h"
 #include "demo.h"
+
+extern lv_font_t lv_font_montserrat_18;
+extern lv_font_t lv_font_montserrat_12;
+
+void _putchar(char c)
+{
+    // hook for all print_* functions
+    draw_char(c);
+}
 
 static int RAND_AB(int a, int b)
 {
 	return (rand() % (b + 1 - a) + a);
-}
-
-/**
- * C++ version 0.4 char* style "itoa":
- * Written by Lukás Chmela
- * Released under GPLv3.
- */
-static char* itoa(int value, char* result, int base) {
-    // check that the base if valid
-    if (base < 2 || base > 36) { *result = '\0'; return result; }
-
-    char* ptr = result, *ptr1 = result, tmp_char;
-    int tmp_value;
-
-    do {
-        tmp_value = value;
-        value /= base;
-        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
-    } while ( value );
-
-    // Apply negative sign
-    if (tmp_value < 0) *ptr++ = '-';
-    *ptr-- = '\0';
-    while(ptr1 < ptr) {
-        tmp_char = *ptr;
-        *ptr--= *ptr1;
-        *ptr1++ = tmp_char;
-    }
-    return result;
 }
 
 void drawLasers()
@@ -45,6 +26,7 @@ void drawLasers()
 	static int16_t alpha=0;
 	static unsigned n_lines=8, x=64, y=16;
 	int dx = 0, dy = 0;
+	char tst[] = LV_SYMBOL_BATTERY_FULL;
 
 	fill(0);
 
@@ -61,16 +43,30 @@ void drawLasers()
 		drawLine(x, y, x + dx, y + dy);
 	}
 
-	char chars[32] = {0xef, 0x81, 0xae, 0x20};
+	int bla = cos1(alpha * 10) * DISPLAY_WIDTH / 32768 / 4 + DISPLAY_WIDTH / 6;
+	int blu = cos1(alpha * 16) * DISPLAY_HEIGHT / 32768 / 4 + DISPLAY_HEIGHT / 8;
 
-	int bla = cos1(alpha * 10) * DISPLAY_WIDTH / 32768 / 4 + DISPLAY_WIDTH / 8;
-	int blu = cos1(alpha * 16) * DISPLAY_HEIGHT / 32768 / 4;
+	set_cursor(bla, blu);
+	set_font(&lv_font_montserrat_12);
+	print_str(LV_SYMBOL_WARNING " Hallo Welt! " LV_SYMBOL_OK "\nZwölf Boxkämpfer");
 
-	draw_str(LV_SYMBOL_WARNING " Hallo Welt! " LV_SYMBOL_OK "\nThe qwjck brown Fox", bla, blu);
-	itoa(frm, chars + 4, 10);
-	draw_str(chars, bla, 45);
+	if (bla < 0) bla = 0;
+	if (blu < 0) blu = 0;
 
-	rect(5, 5, 33, 48, 1);
+	set_cursor(bla, 45);
+	set_font(&lv_font_montserrat_18);
+
+	if ((frm >> 7) & 1)
+		print_str(LV_SYMBOL_EYE_CLOSE);
+	else
+		print_str(LV_SYMBOL_EYE_OPEN);
+	print_dec(frm);
+
+	tst[2] = 0x80 + (frm >> 6) % 5;
+	int w, h;
+	get_bb(tst, &w, &h);
+	set_cursor(DISPLAY_WIDTH - w, blu);
+	print_str(tst);
 
 	alpha += 10;
 	frm++;

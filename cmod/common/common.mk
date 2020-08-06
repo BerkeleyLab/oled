@@ -18,7 +18,8 @@ SRC_V += sfr_pack.v gpio_pack.v gpioz_pack.v
 SRC_V += pb_debouncer.v spi_pack.v spi_engine.v
 
 OBJS += system.o print.o timer.o ssd1322.o
-OBJS += frame_buffer.o aa_line.o demo.o sin1.o lv_font.o lv_font_montserrat_18.o
+OBJS += frame_buffer.o aa_line.o demo.o sin1.o lv_font.o
+OBJS += lv_font_montserrat_18.o lv_font_montserrat_12.o
 
 # run from block ram
 OBJS += startup_irq.o

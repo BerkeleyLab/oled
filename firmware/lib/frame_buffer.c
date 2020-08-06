@@ -79,24 +79,37 @@ static void hLine(unsigned x1, unsigned x2, unsigned y, unsigned shade)
 	}
 }
 
-static void swap(uint8_t *a, uint8_t *b)
+static void swap(int *a, int *b)
 {
-	uint8_t t = *a;
+	int t = *a;
 	*a = *b;
 	*b = t;
 }
 
-void rect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t shade)
+// limits val to l <= val <= h
+static int limit(int l, int val, int h)
+{
+	if (val < l) val = l;
+	if (val > h) val = h;
+	return val;
+}
+
+void rect(int x1, int y1, int x2, int y2, uint8_t shade)
 {
 	shade &= 0x0F;
-	y1 &= DISPLAY_HEIGHT - 1;
-	y2 &= DISPLAY_HEIGHT - 1;
+
+	x1 = limit(0, x1, DISPLAY_WIDTH - 1);
+	x2 = limit(0, x2, DISPLAY_WIDTH - 1);
+	y1 = limit(0, y1, DISPLAY_HEIGHT - 1);
+	y2 = limit(0, y2, DISPLAY_HEIGHT - 1);
 
 	if (x1 > x2)
 		swap(&x1, &x2);
 	if (y1 > y2)
 		swap(&y1, &y2);
 
-	for (unsigned row=y1; row<=y2; row++)
+	for (int row=y1; row<=y2; row++)
 		hLine(x1, x2, row, shade);
+
+	printf("%d %d\n", x1, x2);
 }

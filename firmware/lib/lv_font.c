@@ -28,6 +28,13 @@
 #include "lv_font.h"
 #include "frame_buffer.h"
 
+//--------------------
+// private variables
+//--------------------
+static const lv_font_t *cur_font;
+static int curs_x=0, curs_x_=0, curs_y=0;
+
+
 /** Searches base[0] to base[n - 1] for an item that matches *key.
  *
  * @note The function cmp must return negative if its first
@@ -214,82 +221,60 @@ bool get_glyph_dsc(const lv_font_t * font, lv_font_glyph_dsc_t * dsc_out, uint32
     return true;
 }
 
-/**
- * Decode an UTF-8 character from a string.
- * @param txt pointer to '\0' terminated string
- * @param i start byte index in 'txt' where to start.
- *          After call it will point to the next UTF-8 char in 'txt'.
- *          NULL to use txt[0] as index
- * @return the decoded Unicode character or 0 on invalid UTF-8 code
- */
-static uint32_t lv_txt_utf8_next(const char * txt, uint32_t * i)
+// decodes one UTF8 character at a time, keeping internal state
+// returns a valid unicode character once complete or 0
+//
+// Unicode return value                   UTF-8 encoded chars
+// 00000000 00000000 00000000 0xxxxxxx -> 0xxxxxxx
+// 00000000 00000000 00000yyy yyxxxxxx -> 110yyyyy 10xxxxxx
+// 00000000 00000000 zzzzyyyy yyxxxxxx -> 1110zzzz 10yyyyyy 10xxxxxx
+// 00000000 000wwwzz zzzzyyyy yyxxxxxx -> 11110www 10zzzzzz 10yyyyyy 10xxxxxx
+static uint32_t utf8_dec(char c)
 {
-    /* Unicode to UTF-8
-     * 00000000 00000000 00000000 0xxxxxxx -> 0xxxxxxx
-     * 00000000 00000000 00000yyy yyxxxxxx -> 110yyyyy 10xxxxxx
-     * 00000000 00000000 zzzzyyyy yyxxxxxx -> 1110zzzz 10yyyyyy 10xxxxxx
-     * 00000000 000wwwzz zzzzyyyy yyxxxxxx -> 11110www 10zzzzzz 10yyyyyy 10xxxxxx
-     * */
+    static unsigned readN=0, result=0;
 
-    uint32_t result = 0;
-
-    /*Dummy 'i' pointer is required*/
-    uint32_t i_tmp = 0;
-    if(i == NULL) i = &i_tmp;
-
-    /*Normal ASCII*/
-    if((txt[*i] & 0x80) == 0) {
-        result = txt[*i];
-        (*i)++;
+    if ((c & 0x80) == 0) {
+        // 1 byte character, nothing to decode
+        readN = 0;  // reset state
+        return c;
     }
-    /*Real UTF-8 decode*/
-    else {
-        /*2 bytes UTF-8 code*/
-        if((txt[*i] & 0xE0) == 0xC0) {
-            result = (uint32_t)(txt[*i] & 0x1F) << 6;
-            (*i)++;
-            if((txt[*i] & 0xC0) != 0x80) return 0; /*Invalid UTF-8 code*/
-            result += (txt[*i] & 0x3F);
-            (*i)++;
-        }
-        /*3 bytes UTF-8 code*/
-        else if((txt[*i] & 0xF0) == 0xE0) {
-            result = (uint32_t)(txt[*i] & 0x0F) << 12;
-            (*i)++;
 
-            if((txt[*i] & 0xC0) != 0x80) return 0; /*Invalid UTF-8 code*/
-            result += (uint32_t)(txt[*i] & 0x3F) << 6;
-            (*i)++;
-
-            if((txt[*i] & 0xC0) != 0x80) return 0; /*Invalid UTF-8 code*/
-            result += (txt[*i] & 0x3F);
-            (*i)++;
-        }
-        /*4 bytes UTF-8 code*/
-        else if((txt[*i] & 0xF8) == 0xF0) {
-            result = (uint32_t)(txt[*i] & 0x07) << 18;
-            (*i)++;
-
-            if((txt[*i] & 0xC0) != 0x80) return 0; /*Invalid UTF-8 code*/
-            result += (uint32_t)(txt[*i] & 0x3F) << 12;
-            (*i)++;
-
-            if((txt[*i] & 0xC0) != 0x80) return 0; /*Invalid UTF-8 code*/
-            result += (uint32_t)(txt[*i] & 0x3F) << 6;
-            (*i)++;
-
-            if((txt[*i] & 0xC0) != 0x80) return 0; /*Invalid UTF-8 code*/
-            result += txt[*i] & 0x3F;
-            (*i)++;
-        }
-        else {
-            (*i)++; /*Not UTF-8 char. Go the next.*/
-        }
+    if (readN == 0) {
+        // first byte of several, initialize N bytes decode
+        if ((c & 0xE0) == 0xC0)  // 2 bytes to decode
+            readN = 2;
+        else if ((c & 0xF0) == 0xE0)  // 3 bytes to decode
+            readN = 3;
+        else if ((c & 0xF8) == 0xF0)  // 4 bytes to decode
+            readN = 4;
+        result = 0;
     }
-    return result;
+
+    switch (readN) {
+        case 1:
+            result |= c & 0x3F;
+            readN = 0;
+            return result;
+
+        case 2:
+            result |= (c & 0x1F) << 6;
+            break;
+
+        case 3:
+            result |= (c & 0x0F) << 12;
+            break;
+
+        case 4:
+            result |= (c & 0x07) << 18;
+            break;
+
+        default:
+            readN = 1;
+    }
+    readN--;
+
+    return 0;
 }
-
-const lv_font_t *cur_font;
 
 // 4bpp fonts only
 static void draw_glyph4(const uint8_t *bmp, unsigned x, unsigned y, unsigned w, unsigned h)
@@ -312,17 +297,18 @@ static void draw_glyph4(const uint8_t *bmp, unsigned x, unsigned y, unsigned w, 
     }
 }
 
-// get (approximate) bounding box (width and height) of the rendered text
+// get bounding box (width and height) of the rendered text
 void get_bb(const char *txt, int *w, int *h)
 {
+    unsigned dc=0;
     int x=0;
-    uint32_t c_ind = 0;
-    unsigned dc = lv_txt_utf8_next(txt, &c_ind);
     lv_font_glyph_dsc_t g;
-    while (dc) {
+    while (*txt) {
+        dc = utf8_dec(*txt++);
+        if (dc == 0)
+            continue;
         get_glyph_dsc(cur_font, &g, dc);
         x += g.adv_w;
-        dc = lv_txt_utf8_next(txt, &c_ind);
     }
     if (w)
         *w = x;
@@ -330,55 +316,44 @@ void get_bb(const char *txt, int *w, int *h)
         *h = cur_font->line_height;
 }
 
-
-void draw_str(const char *txt, int x, int y)
+// set upper left position for draw_char()
+void set_cursor(int x, int y)
 {
-    int x_start = x;
-    uint32_t c_ind = 0;
-    unsigned dc = lv_txt_utf8_next(txt, &c_ind);
-    y += cur_font->line_height - cur_font->base_line;
-    lv_font_glyph_dsc_t g;
-    while (dc) {
-        if (dc == '\n' || dc == '\r')
-            x = x_start;
-        if (dc == '\n') {
-            y += cur_font->line_height;
-            dc = lv_txt_utf8_next(txt, &c_ind);
-            continue;
-        }
-        get_glyph_dsc(cur_font, &g, dc);
-        // Don't draw empty characters
-        if (g.box_h > 0 && g.box_w > 0) {
-            const uint8_t *bmp = get_glyph_bitmap(cur_font, dc);
-            draw_glyph4(bmp, x + g.ofs_x, y - g.ofs_y, g.box_w, g.box_h);
-        }
-        x += g.adv_w;
-        dc = lv_txt_utf8_next(txt, &c_ind);
-    }
+    curs_x = x;
+    curs_x_ = x;
+    curs_y = y;
 }
 
+// call this in picorv32s _putchar() to use it with the `print_*()` functions
+void draw_char(char c)
+{
+    lv_font_glyph_dsc_t g;
+    unsigned dc = utf8_dec(c);
+    if (dc == 0)
+        return;
+
+    // These don't really work very well. Too bad.
+    if (dc == '\n' || dc == '\r')
+        curs_x = curs_x_;
+    if (dc == '\n') {
+        curs_y += cur_font->line_height;
+        return;
+    }
+
+    unsigned y = cur_font->line_height - cur_font->base_line + curs_y;
+
+    get_glyph_dsc(cur_font, &g, dc);
+    if (g.box_h > 0 && g.box_w > 0) {
+        const uint8_t *bmp = get_glyph_bitmap(cur_font, dc);
+        if (bmp)
+            draw_glyph4(bmp, curs_x + g.ofs_x, y - g.ofs_y, g.box_w, g.box_h);
+    }
+    curs_x += g.adv_w;
+}
+
+// needs to be called before drawing any characters!
 void set_font(lv_font_t *f)
 {
     if (f)
         cur_font = f;
 }
-
-// void print_font(void)
-// {
-//     lv_font_glyph_dsc_t g;
-
-//     // dmonstrate looking up glyphs
-//     for (unsigned c=0x20; c<=0x80; c++) {
-//         printf("%1c (%02x): ", (char)c, (unsigned)c);
-//         if (get_glyph_dsc(cur_font, &g, c, 0)) {
-//             printf("adv_w: %2d ", g.adv_w); // The glyph needs this space. Draw the next glyph after this width. 8 bit integer, 4 bit fractional */
-//             printf("box_w: %2d ", g.box_w);  // Width of the glyph's bounding box
-//             printf("box_h: %2d ", g.box_h);  // Height of the glyph's bounding box*/
-//             printf("ofs_x: %2d ", g.ofs_x);   // x offset of the bounding box*/
-//             printf("ofs_y: %2d ", g.ofs_y);  // y offset of the bounding box*/
-//             printf("bpp: %2d\n", g.bpp);   // Bit-per-pixel: 1, 2, 4, 8*/
-//         } else {
-//             printf("letter not found\n");
-//         }
-//     }
-// }
