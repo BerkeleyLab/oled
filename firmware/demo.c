@@ -8,6 +8,7 @@
 
 extern lv_font_t lv_font_montserrat_18;
 extern lv_font_t lv_font_montserrat_12;
+extern lv_font_t lv_font_roboto_mono_10;
 
 void _putchar(char c)
 {
@@ -30,31 +31,37 @@ void drawLasers()
 
 	fill(0);
 
+	set_cursor(0, 0);
+	set_font(&lv_font_roboto_mono_10);
+	print_str("Franz jagt im komplett verwahrlosten Taxi\n");
+	print_str("quer durch Bayern.\n");
+	print_str("Zwölf Boxkämpfer jagen Viktor quer über\n");
+	print_str("den großen Sylter Deich.\n");
+	print_str("Quax zwickt Johnys Pferd Bim.");
+
 	if (frm % 400 == 0) {
 		n_lines = RAND_AB(3, 16);  // number of lines
 		x = RAND_AB(4, DISPLAY_WIDTH - 5);  // center point
 		y = RAND_AB(1, DISPLAY_HEIGHT - 2);
-
 	}
 
-	for (unsigned i=0; i<n_lines; i++) {
-		dx = cos1(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
-		dy = sin1(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
-		drawLine(x, y, x + dx, y + dy);
-	}
+	// for (unsigned i=0; i<n_lines; i++) {
+	// 	dx = cos1(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
+	// 	dy = sin1(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
+	// 	drawLine(x, y, x + dx, y + dy);
+	// }
 
 	int bla = cos1(alpha * 10) * DISPLAY_WIDTH / 32768 / 4 + DISPLAY_WIDTH / 6;
 	int blu = cos1(alpha * 16) * DISPLAY_HEIGHT / 32768 / 4 + DISPLAY_HEIGHT / 8;
 
 	set_cursor(bla, blu);
-	set_font(&lv_font_montserrat_12);
-	print_str(LV_SYMBOL_WARNING " Hallo Welt! " LV_SYMBOL_OK "\nZwölf Boxkämpfer");
+	set_font(&lv_font_montserrat_18);
+	print_str(LV_SYMBOL_WARNING " Hallo Welt! " LV_SYMBOL_OK);
 
 	if (bla < 0) bla = 0;
 	if (blu < 0) blu = 0;
 
 	set_cursor(bla, 45);
-	set_font(&lv_font_montserrat_18);
 
 	if ((frm >> 7) & 1)
 		print_str(LV_SYMBOL_EYE_CLOSE);

@@ -4,6 +4,7 @@
 #include "frame_buffer.h"
 #include "demo.h"
 #include "lv_font.h"
+#include "print.h"
 
 #define ZOOM 4
 
@@ -47,6 +48,8 @@ static void init_sdl()
 	SDL_RenderSetScale(rr, ZOOM, ZOOM);
 
 }
+
+extern lv_font_t lv_font_roboto_mono_10;
 
 int main(int argc, char* args[])
 {

@@ -29,6 +29,8 @@
 #define lv_font_get_glyph_dsc_fmt_txt NULL
 #define lv_font_get_bitmap_fmt_txt NULL
 #define LVGL_VERSION_MAJOR 7
+#define LV_VERSION_CHECK(x,y,z) (x == LVGL_VERSION_MAJOR && (y < LVGL_VERSION_MINOR || (y == LVGL_VERSION_MINOR && z <= LVGL_VERSION_PATCH)))
+
 typedef int16_t lv_coord_t;
 
 /** Describes the properties of a glyph. */
