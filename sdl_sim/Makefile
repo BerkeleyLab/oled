@@ -1,10 +1,14 @@
+include ../../bedrock/dir_list.mk
+
 vpath %.c ../firmware
 vpath %.c ../firmware/lib
+vpath %.c $(PICORV_DIR)/firmware/src
 
 LDLIBS = -lSDL2
-CFLAGS += -I../firmware -I../firmware/lib
-OBJS = frame_buffer.o aa_line.o demo.o sin1.o lv_font.o print.o
-OBJS += lv_font_montserrat_18.o lv_font_montserrat_12.o lv_font_roboto_mono_10.o
+CFLAGS += -I../firmware -I../firmware/lib -I$(PICORV_DIR)/firmware/inc -I../../analog_chassis_firmware/lib
+OBJS = frame_buffer.o aa_line.o demo.o sin1.o lv_font.o print.o gui.o
+OBJS += printf.o
+OBJS += lv_font_roboto_mono_17.o lv_font_fa.o
 
 all: test
 

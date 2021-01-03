@@ -57,16 +57,37 @@ int main(int argc, char* args[])
 
 	while (1) {
 		SDL_Event e;
-		if (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) {
-				break;
+		bool isExit = false;
+		unsigned btns=0;
+		while (SDL_PollEvent(&e)) {
+			switch (e.type) {
+				case SDL_QUIT:
+					isExit = true;
+					break;
+
+				case SDL_KEYDOWN:
+	                switch(e.key.keysym.sym) {
+	                    case SDLK_LEFT:
+	                        btns |= 1;
+	                        break;
+	                    case SDLK_RIGHT:
+	                        btns |= 2;
+	                        break;
+	                    case SDLK_UP:
+	                        btns |= 4;
+	                        break;
+            		}
+					break;
+
 			}
 		}
+		if (isExit)
+			break;
 
-		drawLasers();
+		drawLasers(btns);
 
 		send_fb();
-		SDL_Delay(20);
+		SDL_Delay(100);
 	}
 
 	SDL_DestroyRenderer(rr);

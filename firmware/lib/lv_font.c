@@ -58,7 +58,7 @@ static void * _lv_utils_bsearch(const void * key, const void * base, uint32_t n,
     const char * middle;
     int32_t c;
 
-    for(middle = base; n != 0;) {
+    for(middle = (const char *)base; n != 0;) {
         middle += (n / 2) * size;
         if((c = (*cmp)(key, middle)) > 0) {
             n    = (n / 2) - ((n & 1) == 0);
@@ -66,7 +66,7 @@ static void * _lv_utils_bsearch(const void * key, const void * base, uint32_t n,
         }
         else if(c < 0) {
             n /= 2;
-            middle = base;
+            middle = (const char *)base;
         }
         else {
             return (char *)middle;
@@ -113,12 +113,12 @@ static uint32_t get_glyph_dsc_id(const lv_font_t * font, uint32_t letter)
             glyph_id = fdsc->cmaps[i].glyph_id_start + rcp;
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_FORMAT0_FULL) {
-            const uint8_t * gid_ofs_8 = fdsc->cmaps[i].glyph_id_ofs_list;
+            const uint8_t * gid_ofs_8 = (const uint8_t *)fdsc->cmaps[i].glyph_id_ofs_list;
             glyph_id = fdsc->cmaps[i].glyph_id_start + gid_ofs_8[rcp];
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_TINY) {
             uint16_t key = rcp;
-            uint8_t * p = _lv_utils_bsearch(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+            uint8_t * p = (uint8_t *)_lv_utils_bsearch(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
                                             sizeof(fdsc->cmaps[i].unicode_list[0]), unicode_list_compare);
 
             if(p) {
@@ -129,13 +129,13 @@ static uint32_t get_glyph_dsc_id(const lv_font_t * font, uint32_t letter)
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_FULL) {
             uint16_t key = rcp;
-            uint8_t * p = _lv_utils_bsearch(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+            uint8_t * p = (uint8_t *)_lv_utils_bsearch(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
                                             sizeof(fdsc->cmaps[i].unicode_list[0]), unicode_list_compare);
 
             if(p) {
                 uintptr_t ofs = (uintptr_t)(p - (uint8_t *) fdsc->cmaps[i].unicode_list);
                 ofs = ofs >> 1;     /*The list stores `uint16_t` so the get the index divide by 2*/
-                const uint8_t * gid_ofs_16 = fdsc->cmaps[i].glyph_id_ofs_list;
+                const uint8_t * gid_ofs_16 = (const uint8_t *)fdsc->cmaps[i].glyph_id_ofs_list;
                 glyph_id = fdsc->cmaps[i].glyph_id_start + gid_ofs_16[ofs];
             }
         }
@@ -276,25 +276,69 @@ static uint32_t utf8_dec(char c)
     return 0;
 }
 
-// 4bpp fonts only
-static void draw_glyph4(const uint8_t *bmp, unsigned x, unsigned y, unsigned w, unsigned h)
+#define LV_BPP_MASK ((1 << LV_BPP) - 1)
+static int bb_x0=0, bb_x1=DISPLAY_WIDTH, bb_y0=0, bb_y1=DISPLAY_HEIGHT;
+
+static bool check_bb(int x, int y)
+{
+    return (x >= bb_x0 && x <= bb_x1 && y >= bb_y0 && y <= bb_y1);
+}
+
+static void draw_glyph(const uint8_t *bmp, unsigned x, unsigned y, unsigned w, unsigned h)
 {
     int nBitsLoaded = 0;
-    unsigned bits;
+    unsigned bits = 0;
 
     y -= h;
 
     for (unsigned row=0; row<h; row++) {
         for (unsigned col=0; col<w; col++) {
-            if (nBitsLoaded < 4) {
-                bits = *bmp++;
+            if (nBitsLoaded < LV_BPP) {
+                // fill up 8 bits from the right (LSBs)
+                bits <<= 8;
+                bits |= *bmp++;
                 nBitsLoaded += 8;
             }
-            addPixel(col + x, row + y, bits >> 4);
-            bits <<= 4;
-            nBitsLoaded -= 4;
+            // consume LV_BPP bits from the left (MSBs)
+            unsigned tmp = (bits >> (nBitsLoaded - LV_BPP)) & LV_BPP_MASK;
+            if (tmp && check_bb(col + x, row + y))
+                addPixel(col + x, row + y, tmp);
+                // setPixel(col + x, row + y, 1);
+            nBitsLoaded -= LV_BPP;
         }
     }
+}
+
+// needs to be called before drawing any characters!
+void set_font(lv_font_t *f)
+{
+    if (f)
+        cur_font = f;
+}
+
+// set upper left position for draw_char()
+void set_cursor(int x, int y)
+{
+    curs_x = x;
+    curs_x_ = x;
+    curs_y = y;
+}
+
+// set upper left position for draw_char()
+void set_bb(int x0, int x1, int y0, int y1)
+{
+    bb_x0 = x0;
+    bb_x1 = x1;
+    bb_y0 = y0;
+    bb_y1 = y1;
+}
+
+void reset_bb()
+{
+    bb_x0=0;
+    bb_x1=DISPLAY_WIDTH;
+    bb_y0=0;
+    bb_y1=DISPLAY_HEIGHT;
 }
 
 // get bounding box (width and height) of the rendered text
@@ -313,15 +357,7 @@ void get_bb(const char *txt, int *w, int *h)
     if (w)
         *w = x;
     if (h)
-        *h = cur_font->line_height;
-}
-
-// set upper left position for draw_char()
-void set_cursor(int x, int y)
-{
-    curs_x = x;
-    curs_x_ = x;
-    curs_y = y;
+        *h = cur_font->line_height; // - cur_font->base_line;
 }
 
 // call this in picorv32s _putchar() to use it with the `print_*()` functions
@@ -346,14 +382,7 @@ void draw_char(char c)
     if (g.box_h > 0 && g.box_w > 0) {
         const uint8_t *bmp = get_glyph_bitmap(cur_font, dc);
         if (bmp)
-            draw_glyph4(bmp, curs_x + g.ofs_x, y - g.ofs_y, g.box_w, g.box_h);
+            draw_glyph(bmp, curs_x + g.ofs_x, y - g.ofs_y, g.box_w, g.box_h);
     }
     curs_x += g.adv_w;
-}
-
-// needs to be called before drawing any characters!
-void set_font(lv_font_t *f)
-{
-    if (f)
-        cur_font = f;
 }

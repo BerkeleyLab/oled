@@ -20,7 +20,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
-
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -258,6 +257,8 @@ void set_font(lv_font_t *f);
 void set_cursor(int x, int y);
 void draw_char(char c);  // draw 1 or less UTF8 character, adv. cursor
 void get_bb(const char *txt, int *w, int *h);  // get bounding box
+void set_bb(int x0, int x1, int y0, int y1);
+void reset_bb();
 
 
 //-----------------------------------------------
@@ -328,5 +329,22 @@ void get_bb(const char *txt, int *w, int *h);  // get bounding box
  * Symbols from "normal" font
  *-----------------------------*/
 #define LV_SYMBOL_BULLET          "\xE2\x80\xA2"   /*20042, 0x2022*/
+
+// additional symbols included from FA
+// 0xf0c8,0xf14a,0xf111,0xf058,0xf077,0xf078,
+#define LV_SYMBOL_SQUARE "\xef\x83\x88"
+#define LV_SYMBOL_CHECK_SQUARE "\xef\x85\x8a"
+#define LV_SYMBOL_CIRCLE "\xef\x84\x91"
+#define LV_SYMBOL_CHECK_CIRCLE "\xef\x81\x98"
+#define LV_SYMBOL_CHEVRON_UP "\xef\x81\xb7"
+#define LV_SYMBOL_CHEVRON_DOWN "\xef\x81\xb8"
+
+// 0xf2c7,0xf0e7,0xf1e6,0xf2db,0xf519,0xf09c,
+#define LV_SYMBOL_THERMOMETER_FULL "\xef\x8b\x87"
+#define LV_SYMBOL_BOLT "\xef\x83\xa7"
+#define LV_SYMBOL_PLUG "\xef\x87\xa6"
+#define LV_SYMBOL_MICROCHIP "\xef\x8b\x9b"
+#define LV_SYMBOL_BROADCAST_TOWER "\xef\x94\x99"
+#define LV_SYMBOL_UNLOCK "\xef\x82\x9c"
 
 #endif

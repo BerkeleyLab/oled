@@ -1,6 +1,6 @@
 #ifndef DEMO_H
 #define DEMO_H
 
-void drawLasers(void);
+void drawLasers(unsigned btns);
 
 #endif

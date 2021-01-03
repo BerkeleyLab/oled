@@ -59,57 +59,78 @@ void fill(uint8_t shade)
 	memset(g_frameBuff, shade, DISPLAY_WIDTH * DISPLAY_HEIGHT / 2);
 }
 
-// Draw one horizontal line with a certain shade (fast, no checks)
-static void hLine(unsigned x1, unsigned x2, unsigned y, unsigned shade)
-{
-	uint8_t *p = &g_frameBuff[x1 / 2 + y * (DISPLAY_WIDTH / 2)];
+static void limit(int *a, int *b, int lim) {
+	if (*a < 0)
+		*a = 0;
+	if (*a > lim)
+		*a = lim;
+	if (*b < 0)
+		*b = 0;
+	if (*b > lim)
+		*b = lim;
+	if (*a > *b) {
+		int c = *a;
+		*a = *b;
+		*b = c;
+	}
+}
 
-	if (x1 & 0x01) {
+// Draw one horizontal line with a certain shade (fast, no checks)
+static void hLine(unsigned x, unsigned y, unsigned w, uint8_t shade)
+{
+	if (w == 0)
+		return;
+	// printf("hLine(%2d, %2d, %2d, %2d)\n", x, y, w, shade);
+
+	uint8_t *p = &g_frameBuff[x / 2 + y * (DISPLAY_WIDTH / 2)];
+
+	if (x & 0x01) {
 		*p = (*p & 0xF0) | shade;  // set lower nibble only
 		p++;
-		x1++;
+		x++;
+		w--;
 	}
 
-	unsigned len = (x2 - x1 + 1) / 2;
+	unsigned len = w / 2;
 	memset(p, (shade << 4) | shade, len);  // set bytes / words
 
-	if ((x2 & 0x01) == 0) {
+	if (((x + w) & 0x01)) {
 		p += len;
 		*p = (*p & 0x0F) | (shade << 4);  // set upper nibble only
 	}
 }
 
-static void swap(int *a, int *b)
+static void vLine(unsigned x, unsigned y, unsigned h, uint8_t shade)
 {
-	int t = *a;
-	*a = *b;
-	*b = t;
+	for (unsigned i=0; i<h; i++)
+		setPixel(x, y + i, shade);
 }
 
-// limits val to l <= val <= h
-static int limit(int l, int val, int h)
-{
-	if (val < l) val = l;
-	if (val > h) val = h;
-	return val;
-}
-
-void rect(int x1, int y1, int x2, int y2, uint8_t shade)
+void fillRect(int x0, int x1, int y0, int y1, uint8_t shade)
 {
 	shade &= 0x0F;
 
-	x1 = limit(0, x1, DISPLAY_WIDTH - 1);
-	x2 = limit(0, x2, DISPLAY_WIDTH - 1);
-	y1 = limit(0, y1, DISPLAY_HEIGHT - 1);
-	y2 = limit(0, y2, DISPLAY_HEIGHT - 1);
+	limit(&x0, &x1, DISPLAY_WIDTH - 1);
+	limit(&y0, &y1, DISPLAY_HEIGHT - 1);
+	unsigned w = x1 - x0 + 1;
 
-	if (x1 > x2)
-		swap(&x1, &x2);
-	if (y1 > y2)
-		swap(&y1, &y2);
+	// printf("fillRect(%2d, %2d, %2d, %2d, %2d)\n", x0, x1, y0, y1, shade);
 
-	for (int row=y1; row<=y2; row++)
-		hLine(x1, x2, row, shade);
+	for (int row=y0; row<=y1; row++)
+		hLine(x0, row, w, shade);
+}
 
-	printf("%d %d\n", x1, x2);
+void rect(int x0, int x1, int y0, int y1, uint8_t shade)
+{
+	limit(&x0, &x1, DISPLAY_WIDTH - 1);
+	limit(&y0, &y1, DISPLAY_HEIGHT - 1);
+	unsigned w = x1 - x0;
+	unsigned h = y1 - y0;
+
+	// printf("    rect(%2d, %2d, %2d, %2d, %2d)\n", x0, x1, y0, y1, shade);
+
+	hLine(x0, y0, w, shade);
+	hLine(x0, y0 + h, w, shade);
+	vLine(x0, y0, h + 1, shade);
+	vLine(x0 + w, y0, h + 1, shade);
 }
