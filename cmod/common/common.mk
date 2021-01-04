@@ -13,13 +13,13 @@ vpath system.v $(CMOD_DIR)
 
 SRC_V += picorv32.v system.v uart_pack.v uart_rx.v uart_tx.v mpack.v munpack.v
 SRC_V += memory2_pack.v pico_pack.v
-SRC_V += stream_fifo.v shortfifo.v uart_fifo_pack.v uart_stream.v
+SRC_V += stream_fifo.v shortfifo.v fifo.v uart_fifo_pack.v uart_stream.v
 SRC_V += sfr_pack.v gpio_pack.v gpioz_pack.v
 SRC_V += pb_debouncer.v spi_pack.v spi_engine.v
 
-OBJS += system.o print.o timer.o ssd1322.o
-OBJS += frame_buffer.o aa_line.o demo.o sin1.o lv_font.o
-OBJS += lv_font_montserrat_18.o lv_font_montserrat_12.o lv_font_roboto_mono_10.o
+OBJS += system.o timer.o ssd1322.o
+OBJS += frame_buffer.o psu_board_gui.o lv_font.o print.o gui.o
+OBJS += lv_font_roboto_mono_17.o lv_font_fa.o
 
 # run from block ram
 OBJS += startup_irq.o
@@ -30,5 +30,6 @@ SYNTH_OPT += -DBLOCK_RAM_SIZE=$(BLOCK_RAM_SIZE)
 
 CFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\"
 CFLAGS += -I$(CMOD_DIR) -I../../firmware -I../../firmware/lib
+CFLAGS += -I$(PICORV_DIR)/firmware/inc -I../../../analog_chassis_firmware/lib
 CFLAGS += -DBOOTLOADER_BAUDRATE=$(BOOTLOADER_BAUDRATE)
 CFLAGS += -ffunction-sections

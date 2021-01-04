@@ -1,8 +1,10 @@
 # OLED display driver for picorv32
-Tested on [NHD-2.8-25664UCB2](http://www.newhavendisplay.com/specs/NHD-2.8-25664UCB2.pdf): 256 x 64 pixels, 16 shades. 
+Tested on [NHD-2.8-25664UCB2](http://www.newhavendisplay.com/specs/NHD-2.8-25664UCB2.pdf): 256 x 64 pixels, 16 shades.
 Other displays with [ssd1322](https://www.newhavendisplay.com/app_notes/SSD1322.pdf#page=1&zoom=auto,-274,842) controller should also work.
 
-The actual library files are in `firmware/lib`. Everything else is just for demonstration / testing.
+This repo demonstrates the ssd1322 display driver on hardware (CMODA7). It's secondary use is to develop the GUI and GUI library for the AR analog chassis.
+
+The actual re-usable library files are in `firmware/lib`. Everything else is just for demonstration / testing.
 
 # Features
   * draw pixel
@@ -10,7 +12,7 @@ The actual library files are in `firmware/lib`. Everything else is just for demo
   * draw line (anti aliased)
   * draw text (anti aliased, variable or fixed width bitmap fonts, UTF-8 support)
 
-The font engine is a stripped down version of the one used in [LVGL](https://docs.lvgl.io/latest/en/html/overview/font.html). 
+The font engine is a stripped down version of the one used in [LVGL](https://docs.lvgl.io/latest/en/html/overview/font.html).
 
 Only 4 bit / pixel, no kerning, no compression, no bidirectional mode.
 

@@ -90,6 +90,12 @@ void set_brightness(uint8_t val)
     send_cmd(0x5C);  // write VRAM command
 }
 
+void set_inverted(bool val)
+{
+    send_cmd(val ? 0xA7 : 0xA6);
+    send_cmd(0x5C);  // write VRAM command
+}
+
 void send_fb(void)
 {
     uint8_t *p = g_frameBuff;

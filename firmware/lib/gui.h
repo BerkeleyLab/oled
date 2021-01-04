@@ -34,16 +34,17 @@ typedef struct {
 // size of the bounding box, which is erased for redraws, is inferred from `init` text
 void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init, t_align a);
 
-// Update the text in a label, same signature as printf
-// void lv_update_label(t_label *lbl, const char *format, ...);
+// Update the text in a label
+// void lv_update_label(t_label *lbl, const char *format, ...);  // printf-like version
 void lv_update_label(t_label *lbl, const char *buf);
 
 // Update the text in a label with a fixed point fractional number
 void lv_update_label_fix(t_label *lbl, int32_t val, const uint8_t nFract, uint8_t nDigits);
 
 // Update the text in a label with a n-digit decimal number with decimal point fixed at dp
-void lv_update_label_dp(t_label *lbl, uint32_t val, const uint8_t n, const uint8_t dp);
+void lv_update_label_dp(t_label *lbl, int32_t val, const uint8_t n, const uint8_t dp);
 
+// Draw string at cursor
 void lv_print(const char *str);
 
 #endif

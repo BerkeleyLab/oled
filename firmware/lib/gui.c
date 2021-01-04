@@ -98,10 +98,10 @@ void lv_update_label(t_label *lbl, const char *buf)
 		draw_char(*buf++);
 }
 
-void lv_update_label_dp(t_label *lbl, uint32_t val, const uint8_t n, const uint8_t dp)
+void lv_update_label_dp(t_label *lbl, int32_t val, const uint8_t n, const uint8_t dp)
 {
 	char buf[16];
-	udec_dp(val, n, dp, buf);
+	dec_dp(val, n, dp, buf);
     lv_update_label(lbl, buf);
 }
 

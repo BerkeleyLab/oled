@@ -28,6 +28,7 @@
 #define lv_font_get_glyph_dsc_fmt_txt NULL
 #define lv_font_get_bitmap_fmt_txt NULL
 #define LVGL_VERSION_MAJOR 7
+#define LVGL_VERSION_MINOR 0
 #define LV_VERSION_CHECK(x,y,z) (x == LVGL_VERSION_MAJOR && (y < LVGL_VERSION_MINOR || (y == LVGL_VERSION_MINOR && z <= LVGL_VERSION_PATCH)))
 
 typedef int16_t lv_coord_t;
@@ -258,7 +259,7 @@ void set_cursor(int x, int y);
 void draw_char(char c);  // draw 1 or less UTF8 character, adv. cursor
 void get_bb(const char *txt, int *w, int *h);  // get bounding box
 void set_bb(int x0, int x1, int y0, int y1);
-void reset_bb();
+void reset_bb(void);
 
 
 //-----------------------------------------------
