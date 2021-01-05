@@ -31,12 +31,13 @@ void addPixel(unsigned x, unsigned y, uint8_t shade)
 	if (x >= DISPLAY_WIDTH || y >= DISPLAY_HEIGHT)
 		return;
 
-	shade &= 0x0F;
 
 	uint8_t *p = &g_frameBuff[x / 2 + y * (DISPLAY_WIDTH / 2)];
 
 	if ((x & 0x01) == 0)
 		shade <<= 4;
+	else
+		shade &= 0x0F;
 
 	*p |= shade;
 }

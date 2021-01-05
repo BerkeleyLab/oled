@@ -32,7 +32,7 @@ xilinx7_clocks #(
     .DIFF_CLKIN     ("FALSE"),  // Single ended
     .CLKIN_PERIOD   (83.333),   // 12 MHz
     .MULT           (62.500),   // 750 MHz
-    .DIV0           (11),       // 68.2 MHz
+    .DIV0           (7.500),    // 100 MHz
     .DIV1           (7.500)     // 100 MHz
 ) clk_inst(
     .sysclk_p (SYSCLK),
@@ -58,15 +58,14 @@ system #(
     .uart_rx0   (UART_RXD),
 
     // SPI for OLED
-    .spi_cs      (oled_cs),
+    .spi_cs      (),
     .spi_sck     (oled_sck),
     .spi_copi    (oled_copi),
     .spi_cipo    (1'b0),
 
-    .gpio_z      (gpio_z)
+    .gpio_z      ({
+        LEDS[1:0], oled_cs, oled_reset, oled_c_d, LED_B, LED_G, LED_R
+    })
 );
-
-assign LEDS[1:0] = gpio_z[7:6] | {trap, trap};
-assign {oled_reset, oled_c_d, LED_B, LED_G, LED_R} = gpio_z[4:0];
 
 endmodule

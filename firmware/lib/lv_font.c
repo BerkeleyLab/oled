@@ -302,7 +302,7 @@ static void draw_glyph(const uint8_t *bmp, unsigned x, unsigned y, unsigned w, u
             // consume LV_BPP bits from the left (MSBs)
             unsigned tmp = (bits >> (nBitsLoaded - LV_BPP)) & LV_BPP_MASK;
             if (tmp && check_bb(col + x, row + y))
-                addPixel(col + x, row + y, tmp);
+                addPixel(col + x, row + y, tmp);  // TODO SLOW!
                 // setPixel(col + x, row + y, 1);
             nBitsLoaded -= LV_BPP;
         }

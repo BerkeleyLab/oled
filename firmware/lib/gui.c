@@ -13,9 +13,14 @@ void lv_print(const char *str)
 		draw_char(*str++);
 }
 
-// GUI label stuff
-// a is text alignment __AND__ anchor point!
-void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init, t_align a)
+// Initialize a `label`, which has a fixed bounding box and alignment
+// x, y = position of anchor point
+// fnt = the font header file to use
+// init = a string to determine width of the bounding box
+// a = text alignment __AND__ anchor point!
+// draw = if true, also draw the init string to the framebuffer
+// use lv_update_label to change the label content
+void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init, t_align a, bool draw)
 {
 	int w=0, h=0;
 	lbl->x = x;
@@ -45,7 +50,8 @@ void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init,
 		lbl->align = LV_RIGHT;
 	}
 	lbl->y1 = y + h;
-	lv_update_label(lbl, init);
+	if (draw)
+		lv_update_label(lbl, init);
 }
 
 // call it like printf (no space for printf :p)

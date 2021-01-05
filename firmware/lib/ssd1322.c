@@ -7,13 +7,16 @@
 #include "frame_buffer.h"
 
 // set data/command pin of display, 1 = command, 0 = data
-#define D_C(val) SET_GPIO1(BASE_GPIO, GPIO_OUT_REG, 3, val)
+#define D_C(val) SET_GPIO1(OLED_GPIO, GPIO_OUT_REG, OLED_BIT_D_C, val)
 
-// set /RESET pin of display, 0 = Reset, 1 = Run
-#define NRST(val) SET_GPIO1(BASE_GPIO, GPIO_OUT_REG, 4, val)
+// set RESET_N pin of display, 0 = Reset, 1 = Run
+#define RST_N(val) SET_GPIO1(OLED_GPIO, GPIO_OUT_REG, OLED_BIT_RSTN, val)
+
+// Set the CS_N pin
+#define CS_N(val) SET_GPIO1(OLED_GPIO, GPIO_OUT_REG, OLED_BIT_CSN, val)
 
 // send 1 byte of data to display
-#define SPI(val) SPI_SET_DAT_BLOCK(BASE_SPI, val)
+#define SPI(val) SPI_SET_DAT_BLOCK(OLED_SPI, val)
 
 // Initialization for NHD-2.8-25664UCB2 OLED display
 // negative = command, positive = data
@@ -52,6 +55,7 @@ static void send_cmd(uint8_t val)
 
 static void send_init(const int16_t *init, unsigned len)
 {
+    CS_N(0);
     for (unsigned i=0; i<len; i++) {
         if (*init < 0)
             send_cmd(-(*init));
@@ -60,26 +64,33 @@ static void send_init(const int16_t *init, unsigned len)
         init++;
     }
     send_cmd(0x5C); // write VRAM command
+    CS_N(1);
 }
 
 void init_ssd1322(void)
 {
     // Enable outputs
-    SET_GPIO8(BASE_GPIO, GPIO_OUT_REG, 0, 7);
-    SET_GPIO8(BASE_GPIO, GPIO_OE_REG, 0, 0xFF);
-    SPI_INIT(BASE_SPI, 0, 1, 0, 0, 0, 8, 1);
+    SPI_INIT(OLED_SPI, 1, 1, 0, 0, 0, 8, 2);  // Manual CS_N mode
+    D_C(1);
+    CS_N(1);
+    SET_GPIO1(OLED_GPIO, GPIO_OE_REG, OLED_BIT_D_C, 1);
+    SET_GPIO1(OLED_GPIO, GPIO_OE_REG, OLED_BIT_CSN, 1);
 
-    NRST(0);
+// use a negative number for `OLED_BIT_RSTN` to disable reset pin
+#if OLED_BIT_RSTN >= 0
+    SET_GPIO1(OLED_GPIO, GPIO_OE_REG, OLED_BIT_RSTN, 1);
+    RST_N(0);
     DELAY_MS(1);
-
-    NRST(1);
+    RST_N(1);
     DELAY_MS(120);
+#endif
 
     send_init(init, sizeof(init) / sizeof(init[0]));
 }
 
 void set_brightness(uint8_t val)
 {
+    CS_N(0);
     if (val == 0) {
         send_cmd(0xAE);  // display off
     } else {
@@ -88,19 +99,24 @@ void set_brightness(uint8_t val)
         SPI(val - 1);
     }
     send_cmd(0x5C);  // write VRAM command
+    CS_N(1);
 }
 
 void set_inverted(bool val)
 {
+    CS_N(0);
     send_cmd(val ? 0xA7 : 0xA6);
     send_cmd(0x5C);  // write VRAM command
+    CS_N(1);
 }
 
 void send_fb(void)
 {
+    CS_N(0);
     uint8_t *p = g_frameBuff;
     for (unsigned i=0; i<(DISPLAY_WIDTH * DISPLAY_HEIGHT / 2); i++)
         SPI(*p++);
+    CS_N(1);
 }
 
 // x1, y1, x2, y2: the rectangle to update in [pixels]
@@ -109,6 +125,7 @@ void send_fb(void)
 // data in 4 bits / pixel, 2 pixels / byte
 void send_window_4(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *data)
 {
+    CS_N(0);
     x1 >>= 2;
     x2 >>= 2;
     send_cmd(0x15);  // Set column address range
@@ -124,6 +141,7 @@ void send_window_4(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *
     send_cmd(0x5C);  // write VRAM
     for (unsigned i=0; i<n_bytes; i++)
         SPI(*data++);
+    CS_N(1);
 }
 
 // static unsigned get_lumi(uint8_t color)
@@ -139,6 +157,7 @@ void send_window_4(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *
 // this was only used in the full LVGL port
 // void send_window_8(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *data)
 // {
+//     CS_N(0);
 //     x1 >>= 2;
 //     x2 >>= 2;
 //     send_cmd(0x15);  // Set column address range
@@ -157,4 +176,5 @@ void send_window_4(unsigned x1, unsigned y1, unsigned x2, unsigned y2, uint8_t *
 //         tmp |= get_lumi(*data++);
 //         SPI(tmp);
 //     }
+//     CS_N(1);
 // }

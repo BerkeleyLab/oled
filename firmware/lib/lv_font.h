@@ -340,12 +340,12 @@ void reset_bb(void);
 #define LV_SYMBOL_CHEVRON_UP "\xef\x81\xb7"
 #define LV_SYMBOL_CHEVRON_DOWN "\xef\x81\xb8"
 
-// 0xf2c7,0xf0e7,0xf1e6,0xf2db,0xf519,0xf09c,
+// 0xf2c7,0xf0e7,0xf1e6,0xf2db,0xf519,0xf13e,
 #define LV_SYMBOL_THERMOMETER_FULL "\xef\x8b\x87"
 #define LV_SYMBOL_BOLT "\xef\x83\xa7"
 #define LV_SYMBOL_PLUG "\xef\x87\xa6"
 #define LV_SYMBOL_MICROCHIP "\xef\x8b\x9b"
 #define LV_SYMBOL_BROADCAST_TOWER "\xef\x94\x99"
-#define LV_SYMBOL_UNLOCK "\xef\x82\x9c"
+#define LV_SYMBOL_UNLOCK_ALT "\xef\x84\xbe"
 
 #endif

@@ -27,12 +27,16 @@ typedef struct {
     lv_font_t *fnt;
 } t_label;
 
-// initialize a label with aligned text, also handling the bounding box which
-// is erased on redraw
-// x0, y0 is the anchor point, which is on the top left / middle / right
-// depending on the chosen alignment
-// size of the bounding box, which is erased for redraws, is inferred from `init` text
-void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init, t_align a);
+// Initialize a `label`, which has a fixed bounding box (the area which is
+// erased on redraw) and text alignment (left, center, right)
+// use lv_update_label to change the label content
+// x, y:    position of anchor point, which is on the top
+//          left / middle / right, depending on the chosen alignment
+// fnt:     the font header file to use
+// init:    a string to determine width of the bounding box
+// a:       text alignment __AND__ anchor point position
+// draw:    if true, also draw the init string to the framebuffer
+void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init, t_align a, bool draw);
 
 // Update the text in a label
 // void lv_update_label(t_label *lbl, const char *format, ...);  // printf-like version
