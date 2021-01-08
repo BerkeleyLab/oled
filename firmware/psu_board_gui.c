@@ -106,13 +106,13 @@ static void scr_uc(bool isInit)
         lv_init_label(&l0, 5, 15, &lv_font_fa, LV_SYMBOL_BROADCAST_TOWER, LV_LEFT, true);
         lv_triple(&l0, 60,  11,        "UCA  SW",  LV_SYMBOL_SQUARE, "");
         lv_triple(&l1, 60,  l0.y1 + 2, "UCB  SW",  LV_SYMBOL_SQUARE, "");
-        lv_triple(&l2, 165, l0.y,      "ATT", "000", "dB");
-        lv_triple(&l3, 165, l2.y1 + 2, "ATT", "000", "dB");
+        lv_triple(&l2, 165, l0.y,      "", "00000", "dB");
+        lv_triple(&l3, 165, l2.y1 + 2, "", "00000", "dB");
     }
     lv_update_label(   &l0, (reg_map[INLK_A_FLAGS] & 0x02) ? LV_SYMBOL_CHECK_SQUARE : LV_SYMBOL_SQUARE);
     lv_update_label(   &l1, (reg_map[INLK_B_FLAGS] & 0x02) ? LV_SYMBOL_CHECK_SQUARE : LV_SYMBOL_SQUARE);
-    lv_update_label_dp(&l2, reg_map[UP_A_ATT], 3, 0);
-    lv_update_label_dp(&l3, reg_map[UP_B_ATT], 3, 0);
+    lv_update_label_fix(&l2, -reg_map[UP_A_ATT], 1, 1);
+    lv_update_label_fix(&l3, -reg_map[UP_B_ATT], 1, 1);
 }
 
 // Local oscillator status

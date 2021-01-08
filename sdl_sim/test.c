@@ -9,27 +9,35 @@
 #define ZOOM 4
 
 uint16_t reg_map[64] = {
-         6, // uptime (1 h)
-   25 << 8, // PSU_TEMP (25 degC)
-         0, // PSU_VCCINT (0 V)
-      1000, // PSU_VCCAUX  (1 V)
-      1800, // PSU_VCCBRAM  (1.8 V)
-     12546, // PSU_IN_VOLTAGE
-      1234, // PSU_IN_CURRENT
-      5535, // PSU_A_VOLTAGE
-       385, // PSU_A_CURRENT
-      5522, // PSU_B_VOLTAGE
-       119, // PSU_B_CURRENT
-      5627, // PSU_C_VOLTAGE
-       110, // PSU_C_CURRENT
-      5124, // PSU_D_VOLTAGE
-        50, // PSU_D_CURRENT
-        30, // PSU_E_VOLTAGE
-       198, // PSU_E_CURRENT
-  125 << 8, // DC_A_TEMP (125 degC)
-      1000, // DC_A_VOLTAGE (1 V)
-    0xE6F0, // DC_B_TEMP (-25 degC)
-      5000, // DC_B_VOLTAGE (5 V)
+    6,          // uptime (1 h)
+    25 << 8,    // PSU_TEMP (25 degC)
+    0,          // PSU_VCCINT (0 V)
+    1000,       // PSU_VCCAUX  (1 V)
+    1800,       // PSU_VCCBRAM  (1.8 V)
+    12546,      // PSU_IN_VOLTAGE
+    1234,       // PSU_IN_CURRENT
+    5535,       // PSU_A_VOLTAGE
+    385,        // PSU_A_CURRENT
+    5522,       // PSU_B_VOLTAGE
+    119,        // PSU_B_CURRENT
+    5627,       // PSU_C_VOLTAGE
+    110,        // PSU_C_CURRENT
+    5124,       // PSU_D_VOLTAGE
+    50,         // PSU_D_CURRENT
+    30,         // PSU_E_VOLTAGE
+    198,        // PSU_E_CURRENT
+    125 * 0x100,// DC_A_TEMP (125 degC)
+    1000,       // DC_A_VOLTAGE (1 V)
+    -25 * 0x100,// DC_B_TEMP (-25 degC)
+    5000,       // DC_B_VOLTAGE (5 V)
+    0,          // INLK_A_FLAGS
+    0,          // INLK_A_VAL
+    12 * 0x100, // INLK_A_VAL_MAX
+    -65 * 0x100,// INLK_A_VAL_MIN
+    0,          // INLK_B_FLAGS
+    0,          // INLK_B_VAL
+    0,          // INLK_B_VAL_MAX
+    0,          // INLK_B_VAL_MIN
 };
 
 SDL_Renderer *rr = NULL;
