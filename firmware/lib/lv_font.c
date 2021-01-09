@@ -240,14 +240,24 @@ static uint32_t utf8_dec(char c)
     }
 
     if (readN == 0) {
-        // first byte of several, initialize N bytes decode
-        if ((c & 0xE0) == 0xC0)  // 2 bytes to decode
-            readN = 2;
-        else if ((c & 0xF0) == 0xE0)  // 3 bytes to decode
-            readN = 3;
-        else if ((c & 0xF8) == 0xF0)  // 4 bytes to decode
-            readN = 4;
         result = 0;
+
+        // first byte of several, initialize N bytes decode
+        if ((c & 0xE0) == 0xC0) {
+            readN = 1;  // 1 more byte to decode
+            result |= (c & 0x1F) << 6;
+            return 0;
+        } else if ((c & 0xF0) == 0xE0) {
+            readN = 2;
+            result |= (c & 0x0F) << 12;
+            return 0;
+        } else if ((c & 0xF8) == 0xF0) {
+            readN = 3;
+            result |= (c & 0x07) << 18;
+            return 0;
+        } else {  // shouldn't happen?
+            return 0;
+        }
     }
 
     switch (readN) {
@@ -257,15 +267,11 @@ static uint32_t utf8_dec(char c)
             return result;
 
         case 2:
-            result |= (c & 0x1F) << 6;
+            result |= (c & 0x3F) << 6;
             break;
 
         case 3:
-            result |= (c & 0x0F) << 12;
-            break;
-
-        case 4:
-            result |= (c & 0x07) << 18;
+            result |= (c & 0x3F) << 12;
             break;
 
         default:
