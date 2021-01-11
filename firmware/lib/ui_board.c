@@ -59,9 +59,9 @@ static uint8_t mcpReadReg(uint8_t addr)
 
 static void mcpInit(void)
 {
-    SPI_INIT(IO_SPI, 1, 1, 0, 0, 0, 8, 2);  // Manual CS_N mode
-    CS_N(1);
-    RST_N(0);
+	SPI_INIT(IO_SPI, 1, 1, 0, 0, 0, 8, 2);  // Manual CS_N mode
+	CS_N(1);
+	RST_N(0);
 	SET_GPIO1(IO_GPIO, GPIO_OE_REG, IO_CSN, 1);
 	SET_GPIO1(IO_GPIO, GPIO_OE_REG, IO_RSTN, 1);
 	DELAY_US(1);
@@ -120,14 +120,14 @@ static bool oled_inverse = false;
 void uiBoardInit(void)
 {
 	mcpInit();
-    DELAY_MS(1);
+	DELAY_MS(1);
 	mcpWriteReg(OLAT, (1 << P_OLED_NRST));  // Un-reset OLED
 
-    init_ssd1322();
-    set_brightness(9);
+	init_ssd1322();
+	set_brightness(9);
 
-    // Use random initial value
-    oled_inverse = rand() & 1;
+	// Use random initial value
+	oled_inverse = rand() & 1;
 	set_inverted(oled_inverse);
 }
 
