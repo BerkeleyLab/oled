@@ -11,6 +11,7 @@
 #include "frame_buffer.h"
 #include "ssd1322.h"
 #include "lv_font.h"
+#include "ui_board.h"
 #include "psu_board_gui.h"
 
 uint16_t reg_map[64] = {
@@ -74,23 +75,25 @@ void _putchar(char c)
 
 int main(void)
 {
+    // TODO add support for the ui_board
     UART_INIT(BASE_UART0, BOOTLOADER_BAUDRATE);  // Debug print (USB serial)
     _picorv32_irq_enable(1 << IRQ_UART0_RX);
 
-    init_ssd1322();
+    uiBoardInit();
     set_brightness(5);
 
     unsigned frm=0;
     while (1) {
+        uiBoardPoll();  // returns encoder state (btns)
+
         if (btns & 4)
             for (unsigned i=0; i < sizeof(reg_map) / sizeof(reg_map[0]); i++)
                 reg_map[i] += 1;
 
-        set_inverted((frm >> 10) & 1);
-
         draw_psu_gui(btns);
         btns = 0;
         send_fb();
+
         DELAY_MS(100);
         frm++;
     }

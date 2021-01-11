@@ -205,41 +205,41 @@ void draw_psu_gui(unsigned btns)
     if (screen < 7 && (btns & 2))
         screen++;
 
-    bool isRedraw = (frm == 0) || (btns & 3);
-    if (isRedraw)
+    bool isInit = (frm == 0) || (btns & 3);
+    if (isInit)
         fill(0);
 
     switch (screen) {
         case 0:
-            scr_psu(isRedraw, 0);
+            scr_psu(isInit, 0);
             break;
 
         case 1:
-            scr_psu(isRedraw, 1);
+            scr_psu(isInit, 1);
             break;
 
         case 2:
-            scr_fpga(isRedraw);
+            scr_fpga(isInit);
             break;
 
         case 3:
-            scr_dc(isRedraw);
+            scr_dc(isInit);
             break;
 
         case 4:
-            scr_uc(isRedraw);
+            scr_uc(isInit);
             break;
 
         case 5:
-            scr_lo_inlk(isRedraw);
+            scr_lo_inlk(isInit);
             break;
 
         case 6:
-            scr_inlk_maxmin(isRedraw, 0);
+            scr_inlk_maxmin(isInit, 0);
             break;
 
         case 7:
-            scr_inlk_maxmin(isRedraw, 1);
+            scr_inlk_maxmin(isInit, 1);
             break;
     }
 

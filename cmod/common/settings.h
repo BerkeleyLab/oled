@@ -16,8 +16,15 @@
 #define OLED_SPI                BASE_SPI
 #define OLED_GPIO               BASE_GPIO
 #define OLED_BIT_D_C            3
-#define OLED_BIT_RSTN           4
+#define OLED_BIT_RSTN           4  // set to -1 for ui_board
 #define OLED_BIT_CSN            5
+
+// ui_board GPIO expander
+#define IO_SPI                  BASE_SPI
+#define IO_GPIO                 BASE_GPIO
+#define IO_CSN                  10
+#define IO_RSTN                 11
+#define IO_INT                  12
 
 #define IRQ_UART0_RX            0x03
 
