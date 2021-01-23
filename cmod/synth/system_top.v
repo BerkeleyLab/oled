@@ -12,12 +12,15 @@ module system_top (
     input            UART_RXD,
     output           UART_TXD,
 
-    // SPI for OLED
-    output        oled_cs,
-    output        oled_sck,
-    output        oled_copi,
-    output        oled_c_d,
-    output        oled_reset
+    // UI board (oled display, encoder, LEDs)
+    output           UI_OLED_CSN,
+    output           UI_COPI,
+    input            UI_CIPO,
+    output           UI_SCK,
+    inout            UI_IO_INT,
+    output           UI_IO_RSTN,
+    output           UI_IO_CSN,
+    output           UI_OLED_DC
 );
 
 wire pll_reset, sysclk_buf;
@@ -59,12 +62,17 @@ system #(
 
     // SPI for OLED
     .spi_cs      (),
-    .spi_sck     (oled_sck),
-    .spi_copi    (oled_copi),
-    .spi_cipo    (1'b0),
+    .spi_sck     (UI_SCK),
+    .spi_copi    (UI_COPI),
+    .spi_cipo    (UI_CIPO),
 
     .gpio_z      ({
-        LEDS[1:0], oled_cs, oled_reset, oled_c_d, LED_B, LED_G, LED_R
+        LEDS[1:0], LED_B, LED_G, LED_R,
+        UI_OLED_CSN,
+        UI_IO_INT,
+        UI_IO_RSTN,
+        UI_IO_CSN,
+        UI_OLED_DC
     })
 );
 

@@ -24,3 +24,10 @@ The demo app can be previewed and developed on a PC using the [SDL](https://www.
 ![sdl demo app](sdl_sim/oled.png)
 
 See [`psu_board_gui.c`](https://gitlab.lbl.gov/llrf-projects/analog_chassis_firmware/-/blob/master/lib/psu_board_gui.c) for a practical example on how to use this library to draw a GUI.
+
+# Hardware demo
+See `cmod/synth` directory for a synthesizable demo which runs on the Cmod A7 + [ui_board](https://gitlab.lbl.gov/llrf-projects/analog_psu_board#25w230-ui_board).
+
+It demonstrates drawing to the display, setting the LED color and reading the rotary encoder.
+
+This assumes the ui_board is directly, __without cable__, plugged into the Cmod A7 PMOD header.

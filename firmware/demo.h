@@ -1,6 +1,6 @@
 #ifndef DEMO_H
 #define DEMO_H
 
-void demo(void);
+void demo(unsigned btns);
 
 #endif

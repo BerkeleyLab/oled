@@ -49,6 +49,11 @@ static void init_sdl()
 
 }
 
+void setLed(uint8_t val)
+{
+    ;
+}
+
 int main(int argc, char* args[])
 {
     init_sdl();
@@ -67,10 +72,10 @@ int main(int argc, char* args[])
         if (isExit)
             break;
 
-        demo();
+        demo(0);
 
         send_fb();
-        SDL_Delay(100);
+        SDL_Delay(20);
     }
 
     SDL_DestroyRenderer(rr);

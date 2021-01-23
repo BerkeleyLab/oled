@@ -69,8 +69,8 @@ static void send_init(const int16_t *init, unsigned len)
 
 void init_ssd1322(void)
 {
-    // Enable outputs
-    SPI_INIT(OLED_SPI, 1, 1, 0, 0, 0, 8, 2);  // Manual CS_N mode
+    //             ss_man, ss_ctrl, cpol, cpha, lsb, nbits, clk_div
+    SPI_INIT(OLED_SPI,  1,       1,    0,    0,   0,     8, OLED_SPI_CLKDIV);
     D_C(1);
     CS_N(1);
     SET_GPIO1(OLED_GPIO, GPIO_OE_REG, OLED_BIT_D_C, 1);

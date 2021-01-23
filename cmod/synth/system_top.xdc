@@ -23,14 +23,14 @@ set_property -dict { PACKAGE_PIN A18   IOSTANDARD LVCMOS33 } [get_ports { BTNS[0
 set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { BTNS[1] }]; #IO_L19P_T3_16 Sch=btn[1]
 
 ## Pmod Header JA
-# set_property -dict { PACKAGE_PIN G17   IOSTANDARD LVCMOS33 } [get_ports { SPI_SS[0] }]; #IO_L5N_T0_D07_14 Sch=ja[1]
-# set_property -dict { PACKAGE_PIN G19   IOSTANDARD LVCMOS33 } [get_ports { SPI_MOSI[0] }]; #IO_L4N_T0_D05_14 Sch=ja[2]
-# set_property -dict { PACKAGE_PIN N18   IOSTANDARD LVCMOS33 } [get_ports { SPI_MISO[0] }]; #IO_L9P_T1_DQS_14 Sch=ja[3]
-# set_property -dict { PACKAGE_PIN L18   IOSTANDARD LVCMOS33 } [get_ports { SPI_SCK[0] }]; #IO_L8P_T1_D11_14 Sch=ja[4]
-# set_property -dict { PACKAGE_PIN H17   IOSTANDARD LVCMOS33 } [get_ports { SPI_SS[1] }]; #IO_L5P_T0_D06_14 Sch=ja[7]
-# set_property -dict { PACKAGE_PIN H19   IOSTANDARD LVCMOS33 } [get_ports { SPI_MOSI[1] }]; #IO_L4P_T0_D04_14 Sch=ja[8]
-# set_property -dict { PACKAGE_PIN J19   IOSTANDARD LVCMOS33 } [get_ports { SPI_MISO[1] }]; #IO_L6N_T0_D08_VREF_14 Sch=ja[9]
-# set_property -dict { PACKAGE_PIN K18   IOSTANDARD LVCMOS33 } [get_ports { SPI_SCK[1] }]; #IO_L8N_T1_D12_14 Sch=ja[10]
+set_property -dict { PACKAGE_PIN G17   IOSTANDARD LVCMOS33 } [get_ports { UI_IO_INT }]; #IO_L5N_T0_D07_14 Sch=ja[1]
+set_property -dict { PACKAGE_PIN G19   IOSTANDARD LVCMOS33 } [get_ports { UI_IO_RSTN }]; #IO_L4N_T0_D05_14 Sch=ja[2]
+set_property -dict { PACKAGE_PIN N18   IOSTANDARD LVCMOS33 } [get_ports { UI_IO_CSN }]; #IO_L9P_T1_DQS_14 Sch=ja[3]
+set_property -dict { PACKAGE_PIN L18   IOSTANDARD LVCMOS33 } [get_ports { UI_OLED_DC }]; #IO_L8P_T1_D11_14 Sch=ja[4]
+set_property -dict { PACKAGE_PIN H17   IOSTANDARD LVCMOS33 } [get_ports { UI_OLED_CSN }]; #IO_L5P_T0_D06_14 Sch=ja[7]
+set_property -dict { PACKAGE_PIN H19   IOSTANDARD LVCMOS33 } [get_ports { UI_COPI }]; #IO_L4P_T0_D04_14 Sch=ja[8]
+set_property -dict { PACKAGE_PIN J19   IOSTANDARD LVCMOS33 } [get_ports { UI_CIPO }]; #IO_L6N_T0_D08_VREF_14 Sch=ja[9]
+set_property -dict { PACKAGE_PIN K18   IOSTANDARD LVCMOS33 } [get_ports { UI_SCK }]; #IO_L8N_T1_D12_14 Sch=ja[10]
 
 ## Analog XADC Pins
 ## Only declare these if you want to use pins 15 and 16 as single ended analog inputs. pin 15 -> vaux4, pin16 -> vaux12
@@ -84,11 +84,11 @@ set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { BTNS[1
 # set_property -dict { PACKAGE_PIN U5    IOSTANDARD LVCMOS33 } [get_ports { PIO[41] }]; #IO_L16P_T2_34 Sch=pio[41]
 # set_property -dict { PACKAGE_PIN U2    IOSTANDARD LVCMOS33 } [get_ports { PIO[42] }]; #IO_L9N_T1_DQS_34 Sch=pio[42]
 # set_property -dict { PACKAGE_PIN W6    IOSTANDARD LVCMOS33 } [get_ports { PIO[43] }]; #IO_L13N_T2_MRCC_34 Sch=pio[43]
-set_property -dict { PACKAGE_PIN U3    IOSTANDARD LVCMOS33 } [get_ports { oled_cs }]; #IO_L9P_T1_DQS_34 Sch=pio[44]
-set_property -dict { PACKAGE_PIN U7    IOSTANDARD LVCMOS33 } [get_ports { oled_reset }]; #IO_L19P_T3_34 Sch=pio[45]
-set_property -dict { PACKAGE_PIN W7    IOSTANDARD LVCMOS33 } [get_ports { oled_copi }]; #IO_L13P_T2_MRCC_34 Sch=pio[46]
-set_property -dict { PACKAGE_PIN U8    IOSTANDARD LVCMOS33 } [get_ports { oled_sck }]; #IO_L14P_T2_SRCC_34 Sch=pio[47]
-set_property -dict { PACKAGE_PIN V8    IOSTANDARD LVCMOS33 } [get_ports { oled_c_d }]; #IO_L14N_T2_SRCC_34 Sch=pio[48]
+# set_property -dict { PACKAGE_PIN U3    IOSTANDARD LVCMOS33 } [get_ports { oled_cs }]; #IO_L9P_T1_DQS_34 Sch=pio[44]
+# set_property -dict { PACKAGE_PIN U7    IOSTANDARD LVCMOS33 } [get_ports { oled_reset }]; #IO_L19P_T3_34 Sch=pio[45]
+# set_property -dict { PACKAGE_PIN W7    IOSTANDARD LVCMOS33 } [get_ports { oled_copi }]; #IO_L13P_T2_MRCC_34 Sch=pio[46]
+# set_property -dict { PACKAGE_PIN U8    IOSTANDARD LVCMOS33 } [get_ports { oled_sck }]; #IO_L14P_T2_SRCC_34 Sch=pio[47]
+# set_property -dict { PACKAGE_PIN V8    IOSTANDARD LVCMOS33 } [get_ports { oled_c_d }]; #IO_L14N_T2_SRCC_34 Sch=pio[48]
 
 ## Onboard USB UART --> UART0 on the softcore
 set_property -dict { PACKAGE_PIN J18   IOSTANDARD LVCMOS33 } [get_ports { UART_TXD }];  #IO_L7N_T1_D10_14 Sch=uart_rxd_out

@@ -5,6 +5,7 @@
 #include "timer.h"
 #include "spi.h"
 #include "ssd1322.h"
+// #include "print.h"
 #include "settings.h"
 
 // Pins directly controlled over PMOD
@@ -17,8 +18,8 @@
 
 // Pin assignment
 #define P_OLED_NRST 0
-#define P_ENCA 1
-#define P_ENCB 2
+#define P_ENCB 1
+#define P_ENCA 2
 #define P_ENCSW 3
 #define P_LEDR 4
 #define P_LEDG 5
@@ -59,7 +60,9 @@ static uint8_t mcpReadReg(uint8_t addr)
 
 static void mcpInit(void)
 {
-	SPI_INIT(IO_SPI, 1, 1, 0, 0, 0, 8, 2);  // Manual CS_N mode
+    //           ss_man, ss_ctrl, cpol, cpha, lsb, nbits, clk_div
+	SPI_INIT(IO_SPI,  1,       1,    0,    0,   0,     8, IO_SPI_CLKDIV);
+
 	CS_N(1);
 	RST_N(0);
 	SET_GPIO1(IO_GPIO, GPIO_OE_REG, IO_CSN, 1);
@@ -70,7 +73,14 @@ static void mcpInit(void)
 	DELAY_US(1);
 
 	// 1 = input
-	mcpWriteReg(IODIR, (1 << P_ENCA) | (1 << P_ENCB) | (1 << P_ENCSW));
+	mcpWriteReg(
+		IODIR,
+		(1 << P_AUXB) | (1 << P_AUXA) |
+		(1 << P_ENCA) | (1 << P_ENCB) | (1 << P_ENCSW)
+	);
+
+	// 1 = pullup
+	mcpWriteReg(GPPU, (1 << P_AUXB) | (1 << P_AUXA));
 }
 
 // 0 = off, 1 = red, 2 = green, 3 = yellow
@@ -88,9 +98,12 @@ static uint8_t encoderPoll(void)
 	uint8_t ret=0, enc=0;
 
 	uint8_t val = mcpReadReg(GPIO);
+	// for (int i=7; i>=0; i--)
+	// 	_putchar(val & (1 << i) ? '1' : '0');
+	// _putchar('\n');
 
 	// Make button edge sensitive
-	bool btn = (val & (1 << P_ENCSW)) > 0;
+	bool btn = (val & (1 << P_ENCSW)) == 0;
 	if (!btn_last && btn)
 		ret |= 4;
 
@@ -136,9 +149,9 @@ uint8_t uiBoardPoll(void)
 {
 	static uint64_t last_ts = 0;
 
-	// Invert display every 1 h to reduce burn-in
+	// Invert display every 1 min to reduce burn-in
 	uint64_t ts = _picorv32_rd_cycle_64();
-	if (ts - last_ts > 60ll * 60 * F_CLK) {
+	if (ts - last_ts > 1ll * 60 * F_CLK) {
 		oled_inverse = !oled_inverse;
 		set_inverted(oled_inverse);
 		last_ts = ts;
