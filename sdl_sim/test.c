@@ -61,21 +61,37 @@ int main(int argc, char* args[])
     while (1) {
         SDL_Event e;
         bool isExit = false;
-        unsigned btns=0;
+        unsigned btns = 0;
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
                 case SDL_QUIT:
                     isExit = true;
+                    break;
+
+                case SDL_KEYDOWN:
+                    switch(e.key.keysym.sym) {
+                        case SDLK_LEFT:
+                            btns |= (1 << 0);
+                            break;
+
+                        case SDLK_RIGHT:
+                            btns |= (1 << 1);
+                            break;
+
+                        case SDLK_DOWN:
+                            btns |= (1 << 2);
+                            break;
+                    }
                     break;
             }
         }
         if (isExit)
             break;
 
-        demo(0);
+        demo(btns);
 
         send_fb();
-        SDL_Delay(20);
+        SDL_Delay(30);
     }
 
     SDL_DestroyRenderer(rr);
