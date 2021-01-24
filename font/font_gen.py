@@ -37,6 +37,12 @@ def getRange(names):
     return n_hex[:-1]
 
 
+# small font
+system(f'lv_font_conv --size 12 --bpp 4 --format lvgl --no-kerning --no-compress --lv-include lv_font.h \
+  --font Roboto-Regular.ttf -r 0x20-0x7F,0xB0 \
+  -o ../firmware/lv_font_roboto_12.c')
+
+# large monospace with bold numbers and some symbols
 r = getRange(symbols_s.split())
 system(f'lv_font_conv --size 17 --bpp 4 --format lvgl --no-kerning --no-compress --lv-include lv_font.h \
   --font RobotoMono-Regular.ttf -r 0x20-0x7F,0xB0 \
@@ -44,6 +50,7 @@ system(f'lv_font_conv --size 17 --bpp 4 --format lvgl --no-kerning --no-compress
   --font fa-solid-900-custom.woff -r {r} \
   -o ../firmware/lv_font_roboto_mono_17.c')
 
+# some extra large symbols
 r = getRange(symbols_l.split())
 system(f'lv_font_conv --size 32 --bpp 4 --format lvgl --no-kerning --no-compress --lv-include lv_font.h -o ../firmware/lv_font_fa.c \
 --font fa-solid-900-custom.woff -r {r}')

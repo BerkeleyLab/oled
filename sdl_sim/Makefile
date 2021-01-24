@@ -10,7 +10,7 @@ LDLIBS = -lSDL2
 CFLAGS += -I../firmware -I../firmware/lib -I$(PICORV_DIR)/firmware/inc
 CFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\" -DSDL_SIM -g
 OBJS = frame_buffer.o lv_font.o print.o sin1.o aa_line.o demo.o
-OBJS += lv_font_roboto_mono_17.o lv_font_fa.o
+OBJS += lv_font_roboto_12.o lv_font_roboto_mono_17.o lv_font_fa.o
 
 all: test
 

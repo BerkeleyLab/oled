@@ -8,7 +8,7 @@
 #include "ui_board.h"
 #include "demo.h"
 
-extern lv_font_t lv_font_roboto_mono_17, lv_font_fa;
+extern lv_font_t lv_font_roboto_12, lv_font_roboto_mono_17, lv_font_fa;
 
 void _putchar(char c)
 {
@@ -44,12 +44,23 @@ void demo(unsigned btns)
 	}
 	alpha += 30;
 
-	// Show some text
+	// Show some text + custom symbols
 	set_cursor(1, 4);
 	set_font(&lv_font_roboto_mono_17);
-	print_str(RESISTOR " Hallo Welt " SWITCH_OPEN "\nFranz jagt im komplett\nverwahrlosten Taxi ");
+	print_str(RESISTOR " Hallo Welt ");
+	if (led & 1)
+		print_str(SWITCH_CLOSED "\n");
+	else
+		print_str(SWITCH_OPEN "\n");
+
+	// Show more text in smaller font
+	set_font(&lv_font_roboto_12);
+	set_cursor(1, 32);
+	print_str("Franz jagt im komplett verwahr-\nlosten Taxi quer durch Bayern.");
 
 	// flash something on encoder events
+	set_font(&lv_font_roboto_mono_17);
+	set_cursor(180, 40);
 	if (btns & (1 << 0))  // left
 		print_str(CHEVRON_DOWN);
 	else if (btns & (1 << 1))  // right
@@ -61,12 +72,12 @@ void demo(unsigned btns)
 	}
 
 	// frame counter
-	set_cursor(200, 4);
+	set_cursor(190, 4);
 	print_dec(frm);
 
 	// cycle all included large symbols
 	const char *symbols[] = {THERMOMETER_FULL, BOLT, PLUG, MICROCHIP, BROADCAST_TOWER, UNLOCK_ALT};
-	set_cursor(228, 25);
+	set_cursor(210, 25);
 	set_font(&lv_font_fa);
 	print_str(symbols[(frm >> 6) % 6]);
 
