@@ -149,9 +149,9 @@ uint8_t uiBoardPoll(void)
 {
 	static uint64_t last_ts = 0;
 
-	// Invert display every 1 min to reduce burn-in
+	// Invert display every 1 h to reduce burn-in
 	uint64_t ts = _picorv32_rd_cycle_64();
-	if (ts - last_ts > 1ll * 60 * F_CLK) {
+	if (ts - last_ts > 60ll * 60 * F_CLK) {
 		oled_inverse = !oled_inverse;
 		set_inverted(oled_inverse);
 		last_ts = ts;

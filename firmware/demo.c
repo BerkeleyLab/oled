@@ -48,7 +48,7 @@ void demo(unsigned btns)
 	set_cursor(1, 4);
 	set_font(&lv_font_roboto_mono_17);
 	print_str(RESISTOR " Hallo Welt ");
-	if (led & 1)
+	if (led & 3)
 		print_str(SWITCH_CLOSED "\n");
 	else
 		print_str(SWITCH_OPEN "\n");

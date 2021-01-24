@@ -42,9 +42,7 @@ int main(void)
     _picorv32_irq_enable(1 << IRQ_UART0_RX);
 
     uiBoardInit();
-    set_brightness(5);
-
-    setLed(2);
+    set_brightness(9);
 
     while (1) {
         unsigned btns = uiBoardPoll();  // returns encoder state (btns)
