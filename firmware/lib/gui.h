@@ -8,23 +8,23 @@
 //-----------------------------------------------
 // Horizontal alignment
 typedef enum {
-    LV_LEFT,
-    LV_CENTER,
-    LV_RIGHT,
-    LV_RIGHT_REF_LEFT
+	LV_LEFT,
+	LV_CENTER,
+	LV_RIGHT,
+	LV_RIGHT_REF_LEFT
 } t_align;
 
 typedef struct {
-    // text origin
-    int16_t x;
-    int16_t y;
-    // clip window
-    int16_t x0;
-    int16_t y0;
-    int16_t x1;
-    int16_t y1;
-    t_align align;
-    lv_font_t *fnt;
+	// text origin
+	int16_t x;
+	int16_t y;
+	// clip window
+	int16_t x0;
+	int16_t y0;
+	int16_t x1;
+	int16_t y1;
+	t_align align;
+	lv_font_t *fnt;
 } t_label;
 
 // Initialize a `label`, which has a fixed bounding box (the area which is

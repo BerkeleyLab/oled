@@ -108,13 +108,13 @@ void lv_update_label_dp(t_label *lbl, int32_t val, const uint8_t n, const uint8_
 {
 	char buf[16];
 	dec_dp(val, n, dp, buf);
-    lv_update_label(lbl, buf);
+	lv_update_label(lbl, buf);
 }
 
 
 void lv_update_label_fix(t_label *lbl, int32_t val, const uint8_t nFract, uint8_t nDigits)
 {
 	char buf[16];
-    dec_fix(val, nFract, nDigits, buf);
-    lv_update_label(lbl, buf);
+	dec_fix(val, nFract, nDigits, buf);
+	lv_update_label(lbl, buf);
 }

@@ -12,8 +12,8 @@ extern lv_font_t lv_font_roboto_12, lv_font_roboto_mono_17, lv_font_fa;
 
 void _putchar(char c)
 {
-    // hook for all print_* functions
-    draw_char(c);
+	// hook for all print_* functions
+	draw_char(c);
 }
 
 static int RAND_AB(int a, int b)

@@ -60,7 +60,7 @@ static uint8_t mcpReadReg(uint8_t addr)
 
 static void mcpInit(void)
 {
-    //           ss_man, ss_ctrl, cpol, cpha, lsb, nbits, clk_div
+	//           ss_man, ss_ctrl, cpol, cpha, lsb, nbits, clk_div
 	SPI_INIT(IO_SPI,  1,       1,    0,    0,   0,     8, IO_SPI_CLKDIV);
 
 	CS_N(1);
