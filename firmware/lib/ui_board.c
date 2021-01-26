@@ -135,6 +135,7 @@ void uiBoardInit(void)
 	mcpInit();
 	DELAY_MS(1);
 	mcpWriteReg(OLAT, (1 << P_OLED_NRST));  // Un-reset OLED
+	encoderPoll();
 
 	init_ssd1322();
 	set_brightness(9);

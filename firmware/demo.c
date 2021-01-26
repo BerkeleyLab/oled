@@ -25,8 +25,9 @@ void demo(unsigned btns)
 {
 	static unsigned frm = 0;
 	static int16_t alpha=0;
-	static unsigned n_lines=8, x=64, y=16;
+	static unsigned n_lines=4, x=128, y=32;
 	static uint8_t led = 0;
+	static unsigned isBtn;
 	int dx = 0, dy = 0;
 
 	fill(0);
@@ -42,7 +43,10 @@ void demo(unsigned btns)
 		dy = sin1(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
 		drawLine(x, y, x + dx, y + dy);
 	}
-	alpha += 30;
+
+	isBtn |= btns & 3;
+	if (isBtn == 0)
+		alpha += 30;
 
 	// Show some text + custom symbols
 	set_cursor(1, 4);
@@ -61,11 +65,13 @@ void demo(unsigned btns)
 	// flash something on encoder events
 	set_font(&lv_font_roboto_mono_17);
 	set_cursor(180, 40);
-	if (btns & (1 << 0))  // left
+	if (btns & (1 << 0)) {  // left
 		print_str(CHEVRON_DOWN);
-	else if (btns & (1 << 1))  // right
+		alpha -= 1024;
+	} else if (btns & (1 << 1)) {  // right
 		print_str(CHEVRON_UP);
-	else if (btns & (1 << 2)) {  // push
+		alpha += 1024;
+	} else if (btns & (1 << 2)) {  // push
 		print_str(CHECK_CIRCLE);
 		led += 1;
 		setLed(led);
