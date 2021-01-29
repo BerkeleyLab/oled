@@ -118,3 +118,13 @@ void lv_update_label_fix(t_label *lbl, int32_t val, const uint8_t nFract, uint8_
 	dec_fix(val, nFract, nDigits, buf);
 	lv_update_label(lbl, buf);
 }
+
+void lv_update_label_hex(t_label *lbl, int32_t val, uint8_t nDigits)
+{
+	char buf[16];
+	char *p = buf;
+	for (int i = (4*nDigits)-4; i >= 0; i -= 4)
+        *p++ = "0123456789ABCDEF"[(val >> i) % 16];
+    *p++ = '\0';
+	lv_update_label(lbl, buf);
+}

@@ -48,6 +48,9 @@ void lv_update_label_fix(t_label *lbl, int32_t val, const uint8_t nFract, uint8_
 // Update the text in a label with a n-digit decimal number with decimal point fixed at dp
 void lv_update_label_dp(t_label *lbl, int32_t val, const uint8_t n, const uint8_t dp);
 
+// Update the text in a label with a n-digit number in hex format
+void lv_update_label_hex(t_label *lbl, int32_t val, uint8_t nDigits);
+
 // Draw string at cursor
 void lv_print(const char *str);
 
