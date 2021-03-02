@@ -83,6 +83,11 @@ void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init,
 // 		draw_char(*p++);
 // }
 
+void lv_border(t_label *lbl)
+{
+	rect(lbl->x0, lbl->x1, lbl->y0, lbl->y1, 7);  // show bb
+}
+
 void lv_update_label(t_label *lbl, const char *buf)
 {
 	int w=0, h=0;

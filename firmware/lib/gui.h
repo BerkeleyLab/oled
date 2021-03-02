@@ -54,4 +54,7 @@ void lv_update_label_hex(t_label *lbl, int32_t val, uint8_t nDigits);
 // Draw string at cursor
 void lv_print(const char *str);
 
+// Draw a border around the element
+void lv_border(t_label *lbl);
+
 #endif
