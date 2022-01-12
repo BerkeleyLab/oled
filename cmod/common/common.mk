@@ -1,6 +1,6 @@
 XILINX_TOOL = VIVADO
 
-include ~/fpga_wsp/bedrock/dir_list.mk
+include ../../..//bedrock/dir_list.mk
 include $(BUILD_DIR)/top_rules.mk
 include $(PICORV_DIR)/rules.mk
 
