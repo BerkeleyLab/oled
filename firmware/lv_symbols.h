@@ -10,9 +10,11 @@
 #define MICROCHIP "\xef\x8b\x9b"
 #define PLUG "\xef\x87\xa6"
 #define RESISTOR "\xef\xbf\xb2"
-#define SQUARE "\xef\x83\x88"
 #define SWITCH_CLOSED "\xef\xbf\xb1"
 #define SWITCH_OPEN "\xef\xbf\xb0"
 #define THERMOMETER_FULL "\xef\x8b\x87"
 #define UNLOCK_ALT "\xef\x84\xbe"
+#define SQUARE "\xef\x83\x88"
+#define WAVE_SQUARE "\xef\xa0\xbe"
+#define WAVE_SINE "\xef\xa2\x99"
 #endif
