@@ -38,6 +38,8 @@ typedef struct {
 // draw:    if true, also draw the init string to the framebuffer
 void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init, t_align a, bool draw);
 
+void lv_printf_label(t_label *lbl, const char *format, ...);
+
 // Update the text in a label
 // void lv_update_label(t_label *lbl, const char *format, ...);  // printf-like version
 void lv_update_label(t_label *lbl, const char *buf);

@@ -55,33 +55,33 @@ void lv_init_label(t_label *lbl, int x, int y, lv_font_t *fnt, const char *init,
 }
 
 // call it like printf (no space for printf :p)
-// void lv_update_label(t_label *lbl, const char *format, ...)
-// {
-// 	int w=0, h=0;
-// 	char buf[32], *p=buf;
+void lv_printf_label(t_label *lbl, const char *format, ...)
+{
+	int w=0, h=0;
+	char buf[32], *p=buf;
 
-// 	va_list argptr;
-// 	va_start(argptr, format);
-// 	vsnprintf(buf, sizeof(buf), format, argptr);
-// 	va_end(argptr);
+	va_list argptr;
+	va_start(argptr, format);
+	vsnprintf(buf, sizeof(buf), format, argptr);
+	va_end(argptr);
 
-// 	fillRect(lbl->x0, lbl->x1, lbl->y0, lbl->y1, 0);
-// 	// rect(lbl->x0, lbl->x1, lbl->y0, lbl->y1, 7);  // show bb
+	fillRect(lbl->x0, lbl->x1, lbl->y0, lbl->y1, 0);
+	// rect(lbl->x0, lbl->x1, lbl->y0, lbl->y1, 7);  // show bb
 
-// 	set_font(lbl->fnt);
-// 	if (lbl->align == LV_LEFT) {
-// 		set_cursor(lbl->x, lbl->y);
-// 	} else if (lbl->align == LV_CENTER) {
-// 		get_bb(buf, &w, &h);
-// 		set_cursor(lbl->x - w / 2, lbl->y);
-// 	} else if (lbl->align == LV_RIGHT) {
-// 		get_bb(buf, &w, &h);
-// 		set_cursor(lbl->x - w, lbl->y);
-// 	}
-// 	set_bb(lbl->x0, lbl->x1, lbl->y0, lbl->y1);
-// 	while (*p)
-// 		draw_char(*p++);
-// }
+	set_font(lbl->fnt);
+	if (lbl->align == LV_LEFT) {
+		set_cursor(lbl->x, lbl->y);
+	} else if (lbl->align == LV_CENTER) {
+		get_bb(buf, &w, &h);
+		set_cursor(lbl->x - w / 2, lbl->y);
+	} else if (lbl->align == LV_RIGHT) {
+		get_bb(buf, &w, &h);
+		set_cursor(lbl->x - w, lbl->y);
+	}
+	set_bb(lbl->x0, lbl->x1, lbl->y0, lbl->y1);
+	while (*p)
+		draw_char(*p++);
+}
 
 void lv_border(t_label *lbl)
 {
