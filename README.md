@@ -31,3 +31,11 @@ See `cmod/synth` directory for a synthesizable demo which runs on the Cmod A7 + 
 It demonstrates drawing to the display, setting the LED color and reading the rotary encoder.
 
 This assumes the ui_board is directly, __without cable__, plugged into the Cmod A7 PMOD header.
+
+# Copyright Notice and License Agreement
+
+See [LICENSE](LICENSE.md).
+
+True-type and bitmap versions of the _Robot_ and _Font Awesome_ fonts are included for demonstration purposes. Both are licensed under [Apache 2.0](font/LICENSE-2.0.txt).
+
+The bitmap-font engine in `lv_font.c` was taken from the LVGL project and is under a MIT license.
