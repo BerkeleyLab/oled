@@ -2,7 +2,7 @@
 #include "frame_buffer.h"
 #include "aa_line.h"
 #include "lv_font.h"
-#include "sin1.h"
+#include "fast_sin.h"
 #include "print.h"
 #include "lv_symbols.h"
 #include "ui_board.h"
@@ -24,7 +24,7 @@ static int RAND_AB(int a, int b)
 void demo(unsigned btns)
 {
 	static unsigned frm = 0;
-	static int16_t alpha=0;
+	static int alpha = 0;
 	static unsigned n_lines=4, x=128, y=32;
 	static uint8_t led = 0;
 	static unsigned isBtn;
@@ -39,8 +39,8 @@ void demo(unsigned btns)
 		y = RAND_AB(1, DISPLAY_HEIGHT - 2);
 	}
 	for (unsigned i=0; i<n_lines; i++) {
-		dx = cos1(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
-		dy = sin1(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
+		dx = get_cos(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
+		dy = get_sin(alpha + 32767 * i / n_lines) * DISPLAY_WIDTH / 32768;
 		drawLine(x, y, x + dx, y + dy);
 	}
 

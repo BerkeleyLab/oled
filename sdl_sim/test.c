@@ -5,6 +5,7 @@
 #include "frame_buffer.h"
 #include "lv_font.h"
 #include "demo.h"
+#include "fast_sin.h"
 
 #define ZOOM 4
 
