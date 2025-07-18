@@ -6,7 +6,7 @@
 
 #define FRAC_BITS 8  // Number of bits which are used for linear interpolation between table values
 #define FRAC_MASK ((1 << FRAC_BITS) - 1)
-#define TABLE_SIZE (QUARTER_MAX_ANGLE / (1 << FRAC_BITS))
+#define TABLE_SIZE (QUARTER_MAX_ANGLE >> FRAC_BITS)
 
 // [int(sin(2.0 * pi * i / MAX_ANGLE) * SHRT_MAX) for i in range(0, QUARTER_MAX_ANGLE,
 // QUARTER_MAX_ANGLE // TABLE_SIZE)]
