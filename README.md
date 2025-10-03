@@ -32,10 +32,19 @@ It demonstrates drawing to the display, setting the LED color and reading the ro
 
 This assumes the ui_board is directly, __without cable__, plugged into the Cmod A7 PMOD header.
 
-# Copyright Notice and License Agreement
+# Copyright Notice
+OLED Display Driver (oled) Copyright (c) 2025, The Regents of the University of California,
+through Lawrence Berkeley National Laboratory
+(subject to receipt of any required approvals from the U.S. Dept. of Energy).
+All rights reserved.
 
-See [LICENSE](LICENSE.md).
+If you have questions about your rights to use or distribute this software,
+please contact Berkeley Lab's Intellectual Property Office at
+IPO@lbl.gov.
 
-True-type and bitmap versions of the _Roboto_ and _Font Awesome_ fonts are included for demonstration purposes. Both are licensed under [Apache 2.0](font/LICENSE-2.0.txt).
-
-The bitmap-font engine in `lv_font.c` was taken from the LVGL project and is under a MIT license.
+NOTICE.  This Software was developed under funding from the U.S. Department
+of Energy and the U.S. Government consequently retains certain rights.  As
+such, the U.S. Government has been granted for itself and others acting on
+its behalf a paid-up, nonexclusive, irrevocable, worldwide license in the
+Software to reproduce, distribute copies to the public, prepare derivative
+works, and perform publicly and display publicly, and to permit others to do so.
