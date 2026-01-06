@@ -20,5 +20,8 @@ void fill(uint8_t shade);
 void fillRect(int x1, int y1, int x2, int y2, uint8_t shade);
 
 void rect(int x0, int x1, int y0, int y1, uint8_t shade);
+void emptyRoundedRect(int x1, int y1, int x2, int y2, int radius, int thickness);
 
+void invertRect(int x1, int y1, int x2, int y2);
+void invertRoundedRect(int x1, int y1, int x2, int y2, int radius);
 #endif
