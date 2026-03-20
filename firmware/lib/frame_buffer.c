@@ -154,14 +154,14 @@ void rect(int x0, int x1, int y0, int y1, uint8_t shade)
 	vLine(x0 + w, y0, h + 1, shade);
 }
 // Invert all pixels in rectangle
-void invertRect(int x1, int y1, int x2, int y2) {
+void invertRect(int x0, int x1, int y0, int y1) {
     // clamp coordinates
-    if (x1 < 0) x1 = 0;
-    if (y1 < 0) y1 = 0;
-    if (x2 >= DISPLAY_WIDTH)  x2 = DISPLAY_WIDTH - 1;
-    if (y2 >= DISPLAY_HEIGHT) y2 = DISPLAY_HEIGHT - 1;
-    for (int y = y1; y <= y2; y++) {
-        for (int x = x1; x <= x2; x++) {
+    if (x0 < 0) x0 = 0;
+    if (y0 < 0) y0 = 0;
+    if (x1 >= DISPLAY_WIDTH)  x1 = DISPLAY_WIDTH - 1;
+    if (y1 >= DISPLAY_HEIGHT) y1 = DISPLAY_HEIGHT - 1;
+    for (int y = y0; y <= y1; y++) {
+        for (int x = x0; x <= x1; x++) {
             uint8_t shade = getPixel(x, y) & 0x0F;
             hardSetPixel(x, y, (uint8_t)(0x0F - shade));
         }
@@ -231,7 +231,6 @@ void emptyRoundedRect(int x1, int y1, int x2, int y2, int radius, int thickness)
     y1 = (y1 < 0 ? 0 : y1);
     x2 = (x2 > maxW ? maxW : x2);
     y2 = (y2 > maxH ? maxH : y2);
-    int innerRadius = radius - thickness + 1;
     // draw top and bottom border
     for (int y = y1; y < y1 + thickness; ++y) {
         for (int x = x1 + radius; x <= x2 - radius; ++x)
