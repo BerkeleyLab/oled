@@ -1,5 +1,5 @@
 #include <stdarg.h>
-// #include "printf.h"  // tiny printf
+#include "printf.h"  // tiny printf
 #include "print.h"
 #include "lv_font.h"
 #include "ssd1322.h"
