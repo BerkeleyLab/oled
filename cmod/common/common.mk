@@ -1,6 +1,6 @@
 XILINX_TOOL = VIVADO
 
-include ../../..//bedrock/dir_list.mk
+include ../../../bedrock/dir_list.mk
 include $(BUILD_DIR)/top_rules.mk
 include $(PICORV_DIR)/rules.mk
 
@@ -18,7 +18,7 @@ SRC_V += sfr_pack.v gpio_pack.v gpioz_pack.v
 SRC_V += pb_debouncer.v spi_pack.v spi_engine.v
 
 OBJS += system.o timer.o ssd1322.o
-OBJS += frame_buffer.o lv_font.o print.o sin1.o aa_line.o demo.o ui_board.o
+OBJS += frame_buffer.o lv_font.o print.o fast_sin.o aa_line.o demo.o ui_board.o
 OBJS += lv_font_roboto_12.o lv_font_roboto_mono_17.o lv_font_fa.o
 
 # run from block ram

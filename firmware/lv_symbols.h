@@ -6,6 +6,7 @@
 #define CHECK_SQUARE "\xef\x85\x8a"
 #define CHEVRON_DOWN "\xef\x81\xb8"
 #define CHEVRON_UP "\xef\x81\xb7"
+#define CHEVRON_LEFT "\xef\x81\x93"
 #define CIRCLE "\xef\x84\x91"
 #define MICROCHIP "\xef\x8b\x9b"
 #define PLUG "\xef\x87\xa6"
@@ -18,4 +19,5 @@
 #define WAVE_SQUARE "\xef\xa0\xbe"
 #define SPINNER "\xef\x84\x90"
 #define WAVE_SINE "\xef\xa2\x99"
+#define INFO "\xef\x84\xa9"
 #endif
